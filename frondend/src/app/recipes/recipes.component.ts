@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecipeService } from '../recipe.service';
+import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs/internal/Observable';
 import { combineLatest, map } from 'rxjs';
@@ -13,7 +13,6 @@ export class RecipesComponent implements OnInit {
     recipes$: Observable<Recipe[]> | undefined;
     filteredSearch$: Observable<Recipe[]> | undefined;
     searchText$: Observable<string> | undefined;
-    searchText: string = '';
     searchFormControl = new UntypedFormControl();
     constructor(private recipeService: RecipeService) {
         this.searchFormControl = new UntypedFormControl();
@@ -26,10 +25,10 @@ export class RecipesComponent implements OnInit {
         this.filteredSearch$ = combineLatest([this.recipes$, this.searchText$]).pipe(
             map(([recipes, searchText]) => recipes.filter((recipe) => recipe.name.toLowerCase().includes(searchText.toLowerCase())))
         );
-    }
 
-    ngAfterViewInit(): void {
-        // init form value
-        this.searchFormControl.setValue('');
+        // triger the combinelatest
+        setTimeout(() => {
+            this.searchFormControl.setValue('');
+        });
     }
 }
