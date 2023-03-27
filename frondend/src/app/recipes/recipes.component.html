@@ -9,7 +9,7 @@
 
     <div class="recipes">
         <div *ngFor="let recipe of filteredSearch$ | async">
-            <mat-card *ngIf="recipe.name.toLowerCase().includes(searchText.toLowerCase())" class="recipe">
+            <mat-card class="recipe">
                 <mat-card-header>
                     <mat-card-title> {{ recipe.name }}</mat-card-title>
                 </mat-card-header>
