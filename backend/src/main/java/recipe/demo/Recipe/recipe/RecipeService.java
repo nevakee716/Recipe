@@ -11,6 +11,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final CommentRepository commentRepository;
 
+
     @Autowired
     public RecipeService(RecipeRepository recipeRepository,CommentRepository commentRepository) {
         this.recipeRepository = recipeRepository;
@@ -33,6 +34,7 @@ public class RecipeService {
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         existingRecipe.setName(recipe.getName());
         existingRecipe.setDescription(recipe.getDescription());
+        existingRecipe.setInstructions(recipe.getInstructions());
         existingRecipe.setKeywordList(recipe.getKeywordList());
      //   existingRecipe.setIngredientsQuantity(recipe.getIngredientsQuantity());
         return recipeRepository.save(existingRecipe);

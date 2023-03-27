@@ -26,6 +26,9 @@ public class Recipe {
     @Lob
     private String description;
 
+    @Lob
+    private String instructions;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredientsQuantity;
 
@@ -84,6 +87,13 @@ public class Recipe {
         return r;
     }
 
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
 
     public Long getId() {
         return id;
