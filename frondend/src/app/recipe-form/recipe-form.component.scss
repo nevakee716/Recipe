@@ -1,0 +1,15 @@
+.properties {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingredients {
+    display: flex;
+    gap: 0.5rem;
+}
+mat-card-content {
+    margin-top: 1.5rem;
+}
+mat-divider {
+    margin-top: 0.5rem;
+}

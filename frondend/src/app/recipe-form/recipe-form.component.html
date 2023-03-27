@@ -1,1 +1,52 @@
-<p>recipe-form works!</p>
+<form *ngIf="recipeForm" [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Edit Recipe</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="properties">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Image URL</mat-label>
+                    <input matInput formControlName="imageUrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Instructions</mat-label>
+                    <textarea matInput formControlName="instructions"></textarea>
+                </mat-form-field>
+            </div>
+            <div  formArrayName="ingredients">
+                <div *ngFor="let ingredientCtrl of getControls(); let i = index">
+                    <div class="ingredients" [formGroupName]="i">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ingredient</mat-label>
+                            <input matInput formControlName="ingredient" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Quantity</mat-label>
+                            <input matInput formControlName="quantity" />
+                        </mat-form-field>
+                        <button mat-fab color="warn" (click)="onRemoveIngredient(i)"><mat-icon>remove</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+            <button mat-raised-button color="accent" (click)="onAddIngredient()">Add Ingredient</button>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions align="start">
+            <button mat-raised-button type="submit" color="primary">Submit</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

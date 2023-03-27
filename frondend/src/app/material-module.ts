@@ -24,7 +24,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { MatListModule } from '@angular/material/list';
 @NgModule({
     exports: [
         A11yModule,
@@ -54,6 +54,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MatInputModule,
         MatButtonModule,
         ReactiveFormsModule,
+        MatListModule,
     ],
 })
 export class DemoMaterialModule {}
