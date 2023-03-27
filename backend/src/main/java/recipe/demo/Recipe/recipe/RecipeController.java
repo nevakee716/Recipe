@@ -25,6 +25,12 @@ public class RecipeController {
         return recipeService.createRecipe(recipe);
     }
 
+    @GetMapping(value = "/{recipeId}")
+    public List<Recipe> getRecipes(@PathVariable Long recipeId){
+        return recipeService.getRecipe(recipeId);
+    }
+
+
     @PutMapping("/{recipeId}")
     public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody Recipe recipe) {
         return recipeService.updateRecipe(recipeId, recipe);
