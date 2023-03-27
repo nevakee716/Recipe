@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/recipe")
 public class RecipeController {
 
+    private final IngredientService ingredientService;
     private final RecipeService recipeService;
     @Autowired
-    public RecipeController(RecipeService recipeService){
+    public RecipeController(RecipeService recipeService,IngredientService ingredientService){
         this.recipeService = recipeService;
+        this.ingredientService = ingredientService;
     }
     @GetMapping
     public List<Recipe> getRecipes(){
@@ -30,6 +32,10 @@ public class RecipeController {
         return recipeService.getRecipe(recipeId);
     }
 
+    @GetMapping(value = "/ingredients")
+    public List<Ingredient> getIngredients(){
+        return ingredientService.getIngredients();
+    }
 
     @PutMapping("/{recipeId}")
     public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody Recipe recipe) {

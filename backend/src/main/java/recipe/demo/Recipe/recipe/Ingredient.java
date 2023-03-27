@@ -3,6 +3,7 @@ package recipe.demo.Recipe.recipe;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -23,15 +24,15 @@ public class Ingredient {
     private String name;
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeIngredient> recipes;
+    private List<RecipeIngredient> recipesIngredients;
 
     public Ingredient() {
         this.name = "";
-        this.recipes = new ArrayList<>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
     }
     public Ingredient(String name) {
         this.name = name;
-        this.recipes = new ArrayList<>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
     }
 
     public Long getId() {
@@ -50,11 +51,22 @@ public class Ingredient {
         this.name = name;
     }
 
-    public List<RecipeIngredient> getRecipes() {
-        return recipes;
+    public List<RecipeIngredient> recipesIngredientsList() {
+        return this.recipesIngredients;
     }
 
-    public void setRecipes(List<RecipeIngredient> recipes) {
-        this.recipes = recipes;
+
+    public HashMap<String,String> getRecipesIngredients() {
+        HashMap<String,String> r = new HashMap<>();
+        this.recipesIngredients.forEach(recipesIngredient -> {
+            r.put( recipesIngredient.getRecipe().getName(),recipesIngredient.getQuantity());
+        });
+        return r;
+    }
+
+
+
+    public void setRecipesIngredients(List<RecipeIngredient> recipesIngredients) {
+        this.recipesIngredients = recipesIngredients;
     }
 }
