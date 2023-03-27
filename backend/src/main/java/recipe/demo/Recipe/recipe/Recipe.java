@@ -3,7 +3,6 @@ package recipe.demo.Recipe.recipe;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.HashMap;
 
@@ -30,7 +29,7 @@ public class Recipe {
     private String instructions;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeIngredient> ingredientsQuantity;
+    private List<RecipeIngredient> recipesIngredients;
 
     @ManyToMany
     private List<Keyword> keywordList;
@@ -45,43 +44,46 @@ public class Recipe {
     public Recipe(String name) {
         this.name = name;
         this.description = "";
+        this.instructions = "";
         this.commentList = new ArrayList<Comment>();
-        this.ingredientsQuantity = new ArrayList<RecipeIngredient>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
         this.keywordList = new ArrayList<Keyword>();
     }
 
     public Recipe(String name, String description) {
         this.name = name;
         this.description = description;
+        this.instructions = "";
         this.commentList = new ArrayList<Comment>();
-        this.ingredientsQuantity = new ArrayList<RecipeIngredient>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
         this.keywordList = new ArrayList<Keyword>();
     }
 
     public Recipe(String name, String description, List<Keyword> keywords) {
         this.name = name;
         this.description = description;
+        this.instructions = "";
         this.commentList = new ArrayList<Comment>();
-        this.ingredientsQuantity = new ArrayList<RecipeIngredient>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
         this.keywordList = keywords;
     }
 
     public void addIngredient(Ingredient ingredient, String quantity) {
         RecipeIngredient recipeIngredient = new RecipeIngredient(this, ingredient, quantity);
-        ingredientsQuantity.add(recipeIngredient);
-        ingredient.getRecipes().add(recipeIngredient);
+        this.recipesIngredients.add(recipeIngredient);
+        ingredient.recipesIngredientsList().add(recipeIngredient);
     }
 
 
     public void removeIngredient(Ingredient ingredient) {
         RecipeIngredient recipeIngredient = new RecipeIngredient(this, ingredient, null);
-        ingredientsQuantity.remove(recipeIngredient);
-        ingredient.getRecipes().remove(recipeIngredient);
+        this.recipesIngredients.remove(recipeIngredient);
+        ingredient.getRecipesIngredients().remove(recipeIngredient);
     }
 
-    public HashMap<String,String> getIngredients() {
+    public HashMap<String,String> ingredientsList() {
         HashMap<String,String> r = new HashMap<>();
-        this.ingredientsQuantity.forEach(ingredientQuantity -> {
+        this.recipesIngredients.forEach(ingredientQuantity -> {
             r.put(ingredientQuantity.getIngredient().getName(),ingredientQuantity.getQuantity());
         });
         return r;
@@ -121,10 +123,10 @@ public class Recipe {
 
 
     public HashMap<String,String> getIngredientsQuantity() {
-        return this.getIngredients();
+        return this.ingredientsList();
     }
-    public void setIngredientsQuantity(List<RecipeIngredient> ingredientsQuantity) {
-        this.ingredientsQuantity = ingredientsQuantity;
+    public void setIngredientsQuantity(List<RecipeIngredient> recipesIngredient) {
+        this.recipesIngredients = recipesIngredient;
     }
 
     public List<Keyword> getKeywordList() {
@@ -149,7 +151,7 @@ public class Recipe {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-               ", ingredientList=" + getIngredients().toString() +
+               ", ingredientList=" + ingredientsList().toString() +
                ", keywordList=" + keywordList +
                ", commentList=" + commentList +
                 '}';
