@@ -103,6 +103,7 @@ frontend/.history/*
 frontend/.sass-cache
 frontend/connect.lock
 frontend/coverage
+frontend/dist
 frontend/libpeerconnection.log
 frontend/npm-debug.log
 frontend/yarn-error.log
@@ -113,3 +114,4 @@ frontend/.DS_Store
 frontend/Thumbs.db
 frondend/.angular/cache
 frondend/package-lock.json
+frondend/dist/
