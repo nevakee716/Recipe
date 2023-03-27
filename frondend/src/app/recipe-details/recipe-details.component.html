@@ -1,4 +1,42 @@
 <div class="wrapper" *ngFor="let recipe of recipes$ | async">
-    <pre>{{recipe|json}}</pre>
+    <pre>{{ recipe | json }}</pre>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ recipe.name }}</mat-card-title>
+            <mat-card-subtitle>{{ recipe.description }}</mat-card-subtitle>
+        </mat-card-header>
+        <img [src]="recipe.imageUrl" mat-card-image />
+        <mat-card-content class="content">
+            <div class="ingredients">
+                <mat-list>
+                    <div mat-subheader>Ingredients:</div>
+                    <mat-list-item *ngFor="let ingredient of recipe.ingredients | keyvalue">
+                        {{ ingredient.value }} - {{ ingredient.key }}
+                    </mat-list-item>
+                </mat-list>
+            </div>
 
+            <div class="instructions">
+                <div mat-subheader>Instructions:</div>
+                <p>{{ recipe.instructions }}</p>
+            </div>
+        </mat-card-content>
+        <mat-divider class="divider"></mat-divider>
+        <mat-card-content class="comments">
+            <div mat-subheader>Comments :</div>
+            <mat-list>
+                <mat-list-item *ngFor="let comment of recipe.comments">
+                    <h4 mat-line>{{ comment.title }}</h4>
+                    <p mat-line>
+                        <span>By {{ comment.author }} on {{ comment.date | date }}</span>
+                    </p>
+                    <p mat-line>{{ comment.content }}</p>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+        <mat-card-actions align="start">
+            <a mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank">Edit</a>
+            <button mat-button>DELETE</button>
+        </mat-card-actions>
+    </mat-card>
 </div>
