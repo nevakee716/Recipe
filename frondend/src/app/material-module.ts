@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -21,6 +20,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatCardModule } from '@angular/material/card';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     exports: [
@@ -44,9 +47,13 @@ import { MatCardModule } from '@angular/material/card';
         MatSortModule,
         MatToolbarModule,
         MatTreeModule,
-        PortalModule,
-        MatCardModule,
+        FormsModule,
         ScrollingModule,
+        MatCardModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
     ],
 })
 export class DemoMaterialModule {}

@@ -1,0 +1,14 @@
+.wrapper {
+    margin: 3rem;
+    .searchBar {
+        width: 100%;
+    }
+    .recipes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        .recipe {
+            width: 30rem;
+        }
+    }
+}

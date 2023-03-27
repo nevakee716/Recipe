@@ -10,10 +10,11 @@ import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { DemoMaterialModule } from './material-module';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, DemoMaterialModule],
+    imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, DemoMaterialModule, FormsModule],
     providers: [],
     bootstrap: [AppComponent],
 })

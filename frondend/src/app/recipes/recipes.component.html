@@ -1,11 +1,36 @@
-<h3 mat-subheader>Recipes</h3>
-<mat-card *ngFor="let recipe of recipes | async">
-    <mat-card-header>
-        <mat-card-title> {{ recipe.name }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content> {{ recipe.description }}</mat-card-content>
-    <mat-card-actions align="end">
-        <button mat-button>LIKE</button>
-        <button mat-button>SHARE</button>
-    </mat-card-actions>
-</mat-card>
+<div class="wrapper">
+    <mat-form-field class="searchBar">
+        <mat-label>Search</mat-label>
+        <input matInput [matAutocomplete]="auto" type="text" [formControl]="searchFormControl" />
+        <button *ngIf="searchText$ | async" matSuffix mat-icon-button aria-label="Clear" (click)="searchFormControl.setValue('')">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+
+
+        <div class="recipes">
+        <div *ngFor="let recipe of filteredSearch$ | async">
+            <mat-card *ngIf="recipe.name.toLowerCase().includes(searchText.toLowerCase())" class="recipe" >
+                <mat-card-header>
+                    <mat-card-title> {{ recipe.name }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content> {{ recipe.description }}</mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Edit</button>
+                    <button mat-button>Delete</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+    <span>{{searchText$ |async}}</span>
+</div>
+
+
+
+
+<mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let recipe of recipes$ | async" [value]="recipe.name">
+        {{ recipe.name }}
+    </mat-option>
+</mat-autocomplete>
