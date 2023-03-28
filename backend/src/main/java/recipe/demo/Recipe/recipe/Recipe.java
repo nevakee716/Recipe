@@ -28,6 +28,7 @@ public class Recipe {
     @Lob
     private String instructions;
 
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipesIngredients;
 
@@ -81,10 +82,10 @@ public class Recipe {
         ingredient.getRecipesIngredients().remove(recipeIngredient);
     }
 
-    public HashMap<String,String> ingredientsList() {
-        HashMap<String,String> r = new HashMap<>();
+    public List<QuantityIngredient> ingredientsList() {
+        List<QuantityIngredient> r = new ArrayList<>();
         this.recipesIngredients.forEach(ingredientQuantity -> {
-            r.put(ingredientQuantity.getIngredient().getName(),ingredientQuantity.getQuantity());
+            r.add(new QuantityIngredient(ingredientQuantity.getIngredient(),ingredientQuantity.getQuantity()));
         });
         return r;
     }
@@ -122,7 +123,7 @@ public class Recipe {
     }
 
 
-    public HashMap<String,String> getIngredientsQuantity() {
+    public List<QuantityIngredient> getIngredientsQuantity() {
         return this.ingredientsList();
     }
     public void setIngredientsQuantity(List<RecipeIngredient> recipesIngredient) {

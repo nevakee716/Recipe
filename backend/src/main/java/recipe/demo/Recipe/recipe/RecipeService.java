@@ -29,13 +29,14 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    public Recipe updateRecipe(Long recipeId, Recipe recipe) {
+    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients) {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         existingRecipe.setName(recipe.getName());
         existingRecipe.setDescription(recipe.getDescription());
         existingRecipe.setInstructions(recipe.getInstructions());
         existingRecipe.setKeywordList(recipe.getKeywordList());
+
      //   existingRecipe.setIngredientsQuantity(recipe.getIngredientsQuantity());
         return recipeRepository.save(existingRecipe);
     }
