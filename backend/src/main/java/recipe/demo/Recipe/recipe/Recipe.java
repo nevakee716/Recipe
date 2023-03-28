@@ -3,8 +3,11 @@ package recipe.demo.Recipe.recipe;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+
+import static org.aspectj.bridge.MessageUtil.print;
 
 @Entity
 @Table
@@ -29,7 +32,7 @@ public class Recipe {
     private String instructions;
 
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipesIngredients;
 
     @ManyToMany
@@ -81,6 +84,17 @@ public class Recipe {
         this.recipesIngredients.remove(recipeIngredient);
         ingredient.getRecipesIngredients().remove(recipeIngredient);
     }
+
+    public void emptyIngredients() {
+        Iterator<RecipeIngredient> iterator = this.recipesIngredients.iterator();
+        while (iterator.hasNext()) {
+            RecipeIngredient r = iterator.next();
+            r.getIngredient().getRecipesIngredients().remove(r);
+            iterator.remove();
+        }
+    }
+
+
 
     public List<QuantityIngredient> ingredientsList() {
         List<QuantityIngredient> r = new ArrayList<>();
@@ -152,7 +166,6 @@ public class Recipe {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-               ", ingredientList=" + ingredientsList().toString() +
                ", keywordList=" + keywordList +
                ", commentList=" + commentList +
                 '}';

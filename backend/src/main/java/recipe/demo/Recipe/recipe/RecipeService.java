@@ -3,6 +3,7 @@ package recipe.demo.Recipe.recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -11,11 +12,12 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final CommentRepository commentRepository;
 
-
+    private final IngredientRepository ingredientRepository;
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository,CommentRepository commentRepository) {
+    public RecipeService(RecipeRepository recipeRepository,CommentRepository commentRepository,IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.commentRepository = commentRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     public List<Recipe> getRecipes() {
@@ -36,8 +38,23 @@ public class RecipeService {
         existingRecipe.setDescription(recipe.getDescription());
         existingRecipe.setInstructions(recipe.getInstructions());
         existingRecipe.setKeywordList(recipe.getKeywordList());
+        existingRecipe.emptyIngredients();
 
-     //   existingRecipe.setIngredientsQuantity(recipe.getIngredientsQuantity());
+        if(quantityIngredients != null) {
+            quantityIngredients.forEach(quantityIngredient -> {
+                // new ingredient
+                if (quantityIngredient.getIngredient().getId() == 0) {
+                    Ingredient newIngredient = new Ingredient(quantityIngredient.getIngredient().getName());
+                    ingredientRepository.save(newIngredient);
+                    existingRecipe.addIngredient(newIngredient, quantityIngredient.getQuantity());
+                } else {
+                    Long id = quantityIngredient.getIngredient().getId();
+                    Ingredient existingIngredient = ingredientRepository.getReferenceById(id);
+                    existingRecipe.addIngredient(existingIngredient, quantityIngredient.getQuantity());
+                }
+            });
+        }
+
         return recipeRepository.save(existingRecipe);
     }
 
