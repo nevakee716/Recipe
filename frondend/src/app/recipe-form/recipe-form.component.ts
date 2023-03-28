@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Ingredient } from '../models/ingredient';
+import { QuantityIngredient } from '../models/quantity-ingredient';
 import { Recipe } from '../models/recipe';
 import { RecipeFormRequest } from '../models/recipe-form-request';
 import { RecipeService } from '../services/recipe.service';
@@ -15,6 +16,7 @@ import { RecipeService } from '../services/recipe.service';
 })
 export class RecipeFormComponent implements OnInit {
     recipes$: Observable<Recipe[]> | undefined;
+    ingredient$: Observable<Ingredient[]> | undefined;
     recipeId: number = 0;
     recipeForm: FormGroup = new FormGroup({
         name: new FormControl(null, Validators.required),
@@ -36,7 +38,8 @@ export class RecipeFormComponent implements OnInit {
             })
         );
 
-        this.recipeService.getIngredients().subscribe((ingredients) => {
+        this.ingredient$ = this.recipeService.getIngredients();
+        this.ingredient$.subscribe((ingredients) => {
             this.ingredients = ingredients;
         });
 
@@ -62,9 +65,16 @@ export class RecipeFormComponent implements OnInit {
     onSubmit() {
         const recipeForm: RecipeFormRequest = {
             recipe: this.recipeForm?.value,
-            quantityIngredient: this.recipeForm?.value.ingredients.map((i: any) => {
-                let r : Ingredient | undefined = this.ingredients.find((ingredient: Ingredient) => ingredient.name === i.ingredient);
-                if (r === undefined) r = { name : i.ingredient}
+            quantityIngredients: this.recipeForm?.value.ingredients.map((i: any) => {
+                let ingredient: Ingredient | undefined = this.ingredients.find(
+                    (ingredient: Ingredient) => ingredient.name === i.ingredient
+                );
+                if (ingredient === undefined) ingredient = { id: 0, name: i.ingredient };
+
+                let r: QuantityIngredient = {
+                    ingredient: ingredient,
+                    quantity: i.quantity,
+                };
                 return r;
             }),
         };
