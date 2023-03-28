@@ -4,15 +4,15 @@ import java.util.List;
 
 public class RecipeFormRequest {
     private Recipe recipe;
-    private List<QuantityIngredient> quantityIngredient;
+    private List<QuantityIngredient> quantityIngredients;
 
 
     public RecipeFormRequest() {
     }
 
-    public RecipeFormRequest(List<QuantityIngredient> quantityIngredient, Recipe recipe) {
+    public RecipeFormRequest(List<QuantityIngredient> quantityIngredients, Recipe recipe) {
         this.recipe = recipe;
-        this.quantityIngredient = quantityIngredient;
+        this.quantityIngredients = quantityIngredients;
     }
 
     public Recipe getRecipe() {
@@ -23,11 +23,11 @@ public class RecipeFormRequest {
         this.recipe = recipe;
     }
 
-    public List<QuantityIngredient> getQuantityIngredient() {
-        return quantityIngredient;
+    public List<QuantityIngredient> getQuantityIngredients() {
+        return quantityIngredients;
     }
 
-    public void setQuantityIngredient(List<QuantityIngredient> quantityIngredient) {
-        this.quantityIngredient = quantityIngredient;
+    public void setQuantityIngredient(List<QuantityIngredient> quantityIngredients) {
+        this.quantityIngredients = quantityIngredients;
     }
 }
