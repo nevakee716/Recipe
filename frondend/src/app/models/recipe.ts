@@ -1,4 +1,4 @@
-import { IngredientQuantity } from './ingredientquantity';
+import { QuantityIngredient } from './quantity-ingredient';
 import { Comment } from './comment';
 
 export interface Recipe {
@@ -7,6 +7,6 @@ export interface Recipe {
     description: string;
     imageUrl: string;
     instructions: string;
-    ingredients: any;
+    ingredientsQuantity: QuantityIngredient[];
     comments: Comment[];
 }

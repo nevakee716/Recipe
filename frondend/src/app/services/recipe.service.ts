@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Recipe } from '../models/recipe';
+import { RecipeFormRequest } from '../models/recipe-form-request';
+;
 import { Ingredient } from '../models/ingredient';
 import { environment } from '../../environments/environment';
+
+
 
 @Injectable({
     providedIn: 'root',
@@ -29,8 +33,10 @@ export class RecipeService {
         return this.http.post<Recipe>(this.apiUrl, recipe);
     }
 
-    updateRecipe(id: number, recipe: Recipe): Observable<Recipe> {
-        return this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipe);
+    updateRecipe(id: number, recipeFormRequest: RecipeFormRequest): Observable<Recipe> {
+        const response$: Observable<Recipe> = this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipeFormRequest);
+        response$.subscribe((r) => console.log(r))
+        return response$;
     }
 
     deleteRecipe(id: number): Observable<void> {

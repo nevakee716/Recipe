@@ -13,7 +13,11 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
-                    <textarea matInput formControlName="description"></textarea>
+                    <textarea
+                        matInput
+                        cdkTextareaAutosize
+                        formControlName="description"
+                    ></textarea>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
@@ -21,12 +25,16 @@
                     <input matInput formControlName="imageUrl" />
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
+                <mat-form-field class="longText" appearance="outline">
                     <mat-label>Instructions</mat-label>
-                    <textarea matInput formControlName="instructions"></textarea>
+                    <textarea
+                        matInput
+                        cdkTextareaAutosize
+                        formControlName="instructions"
+                    ></textarea>
                 </mat-form-field>
             </div>
-            <div  formArrayName="ingredients">
+            <div formArrayName="ingredients">
                 <div *ngFor="let ingredientCtrl of getControls(); let i = index">
                     <div class="ingredients" [formGroupName]="i">
                         <mat-form-field appearance="outline">

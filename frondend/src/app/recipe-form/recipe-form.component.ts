@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@ang
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { Ingredient } from '../models/ingredient';
 import { Recipe } from '../models/recipe';
+import { RecipeFormRequest } from '../models/recipe-form-request';
 import { RecipeService } from '../services/recipe.service';
 
 @Component({
@@ -21,6 +23,7 @@ export class RecipeFormComponent implements OnInit {
         instructions: new FormControl(null, Validators.required),
         ingredients: new FormArray([]),
     });
+    ingredients: Ingredient[] = [];
 
     constructor(public route: ActivatedRoute, private recipeService: RecipeService) {}
 
@@ -33,6 +36,10 @@ export class RecipeFormComponent implements OnInit {
             })
         );
 
+        this.recipeService.getIngredients().subscribe((ingredients) => {
+            this.ingredients = ingredients;
+        });
+
         this.recipes$.subscribe((recipes) => {
             let recipe = recipes[0];
             this.recipeForm = new FormGroup({
@@ -42,11 +49,10 @@ export class RecipeFormComponent implements OnInit {
                 instructions: new FormControl(recipe.instructions, Validators.required),
                 ingredients: new FormArray([]),
             });
-            console.log(recipe.ingredients);
-            for (const [ingredient, quantity] of Object.entries(recipe.ingredients)) {
+            for (const ingredientQuantity of recipe.ingredientsQuantity) {
                 const ingredientGroup = new FormGroup({
-                    ingredient: new FormControl(ingredient, Validators.required),
-                    quantity: new FormControl(quantity, Validators.required),
+                    ingredient: new FormControl(ingredientQuantity.ingredient.name, Validators.required),
+                    quantity: new FormControl(ingredientQuantity.quantity, Validators.required),
                 });
                 (<FormArray>this.recipeForm?.get('ingredients')).push(ingredientGroup);
             }
@@ -54,7 +60,17 @@ export class RecipeFormComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.recipeForm?.value);
+        const recipeForm: RecipeFormRequest = {
+            recipe: this.recipeForm?.value,
+            quantityIngredient: this.recipeForm?.value.ingredients.map((i: any) => {
+                let r : Ingredient | undefined = this.ingredients.find((ingredient: Ingredient) => ingredient.name === i.ingredient);
+                if (r === undefined) r = { name : i.ingredient}
+                return r;
+            }),
+        };
+
+        if (this.recipeId !== 0) this.recipeService.updateRecipe(this.recipeId, recipeForm);
+        else this.recipeService.createRecipe(this.recipeForm?.value);
     }
 
     onAddIngredient() {

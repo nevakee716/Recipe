@@ -10,8 +10,8 @@
             <div class="ingredients">
                 <mat-list>
                     <div mat-subheader>Ingredients:</div>
-                    <mat-list-item *ngFor="let ingredient of recipe.ingredients | keyvalue">
-                        {{ ingredient.value }} - {{ ingredient.key }}
+                    <mat-list-item *ngFor="let ingredientQuantity of recipe.ingredientsQuantity">
+                        {{ ingredientQuantity.ingredient.name }} - {{ ingredientQuantity.quantity }}
                     </mat-list-item>
                 </mat-list>
             </div>
