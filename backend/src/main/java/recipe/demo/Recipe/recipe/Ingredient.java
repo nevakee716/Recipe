@@ -58,9 +58,9 @@ public class Ingredient {
 
     public HashMap<String,String> getRecipesIngredients() {
         HashMap<String,String> r = new HashMap<>();
-        this.recipesIngredients.forEach(recipesIngredient -> {
-            r.put( recipesIngredient.getRecipe().getName(),recipesIngredient.getQuantity());
-        });
+//        this.recipesIngredients.forEach(recipesIngredient -> {
+//            r.put( recipesIngredient.getRecipe().getName(),recipesIngredient.getQuantity());
+//        });
         return r;
     }
 
