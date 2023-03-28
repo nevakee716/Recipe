@@ -5,5 +5,5 @@ import { QuantityIngredient } from './quantity-ingredient';
 ;
 export interface RecipeFormRequest {
     recipe: Recipe;
-    quantityIngredient: QuantityIngredient;
+    quantityIngredients: QuantityIngredient[];
 }
