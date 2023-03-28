@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 public class RecipeConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(RecipeRepository repository, IngredientRepository ingredientRepository, KeywordRepository keywordRepository) {
+    CommandLineRunner commandLineRunner(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, KeywordRepository keywordRepository) {
         return args -> {
 
             Keyword plat = new Keyword("Plat en Sauce");
@@ -45,8 +46,24 @@ public class RecipeConfiguration {
             pot.addIngredient(navet, "250g");
             pot.addIngredient(carotte, "500g");
 
+            recipeRepository.saveAll(List.of(blanquette, pot));
 
-            repository.saveAll(List.of(blanquette, pot));
+            Long recipeId = pot.getId();
+            Recipe existingRecipe = recipeRepository.findById(recipeId)
+                    .orElseThrow(() -> new IllegalStateException("Recipe not found"));
+            existingRecipe.emptyIngredients();
+
+
+            existingRecipe.addIngredient(boeuf, "1kg");
+            existingRecipe.addIngredient(navet, "250g");
+            existingRecipe.addIngredient(carotte, "500g");
+
+            Ingredient celeri = new Ingredient("Celeri");
+            ingredientRepository.save(celeri);
+            existingRecipe.addIngredient(celeri, "50g");
+            recipeRepository.save(existingRecipe);
+
+
         };
     }
 }
