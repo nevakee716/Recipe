@@ -39,7 +39,7 @@ public class RecipeController {
 
     @PutMapping("/{recipeId}")
     public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
-        return recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredient());
+        return recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients());
     }
 
     @DeleteMapping("/{recipeId}")
