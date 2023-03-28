@@ -22,7 +22,7 @@ export class RecipeService {
     }
 
     getIngredients(): Observable<Ingredient[]> {
-        return this.http.get<Ingredient[]>(this.apiUrl);
+        return this.http.get<Ingredient[]>(`${this.apiUrl}/ingredients`);
     }
 
     getRecipe(id: number): Observable<Recipe[]> {
