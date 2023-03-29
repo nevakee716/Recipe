@@ -1,14 +1,11 @@
 package recipe.demo.Recipe.recipe;
 
-import org.hibernate.annotations.Bag;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 public class RecipeConfiguration {
@@ -19,9 +16,9 @@ public class RecipeConfiguration {
 
             // Check or Create Default Ingredients
             List<Ingredient> ingredientsList = new ArrayList<>();
-            List.of("Boeuf","Navet","Carotte","Crème","Veau").forEach(ing -> {
+            List.of("Boeuf", "Navet", "Carotte", "Crème", "Veau").forEach(ing -> {
                 List<Ingredient> r = ingredientRepository.findByName(ing);
-                if(r.size() > 0) ingredientsList.add(r.get(0));
+                if (r.size() > 0) ingredientsList.add(r.get(0));
                 else {
                     Ingredient newIngredient = new Ingredient(ing);
                     ingredientRepository.save(newIngredient);
@@ -29,9 +26,12 @@ public class RecipeConfiguration {
                 }
             });
 
-            // Create Default Ingredients
-            if(recipeRepository.findAll().size() == 0) {
-                // Create Recipe 1
+
+            List<Recipe> r = new ArrayList<>();
+
+            // Create Recipe 1
+            r = recipeRepository.findByName("Blanquette de veau");
+            if (r.size() == 0) {
                 Recipe blanquette = new Recipe(
                         "Blanquette de veau",
                         "blahoihaoia djaijdaz ojdaiozjd "
@@ -39,7 +39,12 @@ public class RecipeConfiguration {
                 blanquette.addIngredient(ingredientsList.get(4), "700 g");
                 blanquette.addIngredient(ingredientsList.get(3), "50 cl");
                 blanquette.addIngredient(ingredientsList.get(2), "500 g");
-                // Create Recipe 2
+                recipeRepository.save(blanquette);
+            }
+
+            // Create Recipe 1
+            r = recipeRepository.findByName("Pot au feu");
+            if (r.size() == 0) {
                 Recipe pot = new Recipe(
                         "Pot au feu",
                         "djaijdaz dsqd ojdaiozjd "
@@ -47,8 +52,10 @@ public class RecipeConfiguration {
                 pot.addIngredient(ingredientsList.get(0), "1kg");
                 pot.addIngredient(ingredientsList.get(1), "250g");
                 pot.addIngredient(ingredientsList.get(2), "500g");
-                recipeRepository.saveAll(List.of(blanquette, pot));
+                recipeRepository.save(pot);
             }
+
+
             Keyword plat = new Keyword("Plat en Sauce");
 
 

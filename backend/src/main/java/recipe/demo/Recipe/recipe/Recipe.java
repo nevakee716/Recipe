@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.HashMap;
 
 import static org.aspectj.bridge.MessageUtil.print;
 
@@ -25,10 +24,10 @@ public class Recipe {
     private Long id;
     private String name;
 
-    @Lob
+    @Column(length = 500)
     private String description;
 
-    @Lob
+    @Column(length = 5000)
     private String instructions;
 
 
