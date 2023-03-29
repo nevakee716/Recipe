@@ -100,8 +100,8 @@ export class RecipeFormComponent implements OnInit {
                 answered = await lastValueFrom(this.recipeService.createRecipe(this.recipeForm?.value));
                 this._snackBar.open('Recipe Successfully Created', 'Close');
             }
-        } catch (e) {
-            this._snackBar.open(`Issue when submitting the recipe : ${e}`, 'Close');
+        } catch (e: any) {
+            this._snackBar.open(`Issue when submitting the recipe : ${e?.error?.error}`, 'Close');
         }
         this.refreshIngredients();
     }
