@@ -43,6 +43,9 @@ public class Recipe {
     public Recipe() {
         this.name = "";
         this.description = "";
+        this.commentList = new ArrayList<Comment>();
+        this.recipesIngredients = new ArrayList<RecipeIngredient>();
+        this.keywordList = new ArrayList<Keyword>();
     }
 
     public Recipe(String name) {
