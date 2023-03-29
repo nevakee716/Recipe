@@ -8,19 +8,17 @@
     </mat-form-field>
 
     <div class="recipes">
-        <div *ngFor="let recipe of filteredSearch$ | async">
-            <mat-card class="recipe">
-                <mat-card-header>
-                    <mat-card-title> {{ recipe.name }}</mat-card-title>
-                </mat-card-header>
-                <mat-card-content> {{ recipe.description }}</mat-card-content>
-                <mat-card-actions>
-                    <a mat-button href="/recipes/{{ recipe.id }}" target="_blank">View</a>
-                    <a mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank">Edit</a>
-                    <button mat-button>Delete</button>
-                </mat-card-actions>
-            </mat-card>
-        </div>
+        <mat-card *ngFor="let recipe of filteredSearch$ | async" class="recipe">
+            <mat-card-header>
+                <mat-card-title> {{ recipe.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content> {{ recipe.description }}</mat-card-content>
+            <mat-card-actions>
+                <a mat-button href="/recipes/{{ recipe.id }}" target="_blank">View</a>
+                <a mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank">Edit</a>
+                <button mat-button>Delete</button>
+            </mat-card-actions>
+        </mat-card>
     </div>
     <div class="addButton">
         <a href="/recipes/edit/0" target="_blank">
