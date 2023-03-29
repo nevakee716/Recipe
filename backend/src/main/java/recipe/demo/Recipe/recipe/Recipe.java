@@ -82,14 +82,14 @@ public class Recipe {
     public void removeIngredient(Ingredient ingredient) {
         RecipeIngredient recipeIngredient = new RecipeIngredient(this, ingredient, null);
         this.recipesIngredients.remove(recipeIngredient);
-        ingredient.getRecipesIngredients().remove(recipeIngredient);
+        //ingredient.getRecipesIngredients().remove(recipeIngredient);
     }
 
     public void emptyIngredients() {
         Iterator<RecipeIngredient> iterator = this.recipesIngredients.iterator();
         while (iterator.hasNext()) {
             RecipeIngredient r = iterator.next();
-            r.getIngredient().getRecipesIngredients().remove(r);
+        //    r.getIngredient().getRecipesIngredients().remove(r);
             iterator.remove();
         }
     }
