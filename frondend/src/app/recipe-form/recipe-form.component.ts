@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
-import { Subscription, lastValueFrom, last } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Ingredient } from '../models/ingredient';
 import { QuantityIngredient } from '../models/quantity-ingredient';
