@@ -9,6 +9,7 @@ import { QuantityIngredient } from '../models/quantity-ingredient';
 import { Recipe } from '../models/recipe';
 import { RecipeFormRequest } from '../models/recipe-form-request';
 import { RecipeService } from '../services/recipe.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-recipe-form',
@@ -29,7 +30,7 @@ export class RecipeFormComponent implements OnInit {
     });
     ingredients: Ingredient[] = [];
 
-    constructor(public route: ActivatedRoute, private recipeService: RecipeService) {}
+    constructor(private _snackBar: MatSnackBar, public route: ActivatedRoute, private recipeService: RecipeService) {}
 
     ngOnDestroy(): void {
         // tslint:disable-next-line: deprecation
@@ -92,10 +93,15 @@ export class RecipeFormComponent implements OnInit {
         };
         let answered;
         try {
-            if (this.recipeId !== 0) answered = await lastValueFrom(this.recipeService.updateRecipe(this.recipeId, recipeForm));
-            else answered = await lastValueFrom(this.recipeService.createRecipe(this.recipeForm?.value));
+            if (this.recipeId !== 0) {
+                answered = await lastValueFrom(this.recipeService.updateRecipe(this.recipeId, recipeForm));
+                this._snackBar.open('Recipe Successfully Edited', 'Close');
+            } else {
+                answered = await lastValueFrom(this.recipeService.createRecipe(this.recipeForm?.value));
+                this._snackBar.open('Recipe Successfully Created', 'Close');
+            }
         } catch (e) {
-            console.error(`Issue when submit recette ${e}`);
+            this._snackBar.open(`Issue when submitting the recipe : ${e}`, 'Close');
         }
         this.refreshIngredients();
     }

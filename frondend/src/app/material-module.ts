@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
     exports: [
         A11yModule,
@@ -55,6 +56,7 @@ import { MatListModule } from '@angular/material/list';
         MatButtonModule,
         ReactiveFormsModule,
         MatListModule,
+        MatSnackBarModule,
     ],
 })
 export class DemoMaterialModule {}
