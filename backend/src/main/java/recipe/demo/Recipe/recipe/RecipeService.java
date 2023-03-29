@@ -27,10 +27,17 @@ public class RecipeService {
         return recipeRepository.findAllById(List.of(recipeId));
     }
 
-    public Recipe createRecipe(Recipe recipe) {
-        return recipeRepository.save(recipe);
-    }
 
+    public Recipe createRecipe(Recipe recipe,List<QuantityIngredient> quantityIngredients) {
+        Recipe newRecipe = new Recipe();
+        newRecipe.setName(recipe.getName());
+        newRecipe.setDescription(recipe.getDescription());
+        newRecipe.setInstructions(recipe.getInstructions());
+        newRecipe.setKeywordList(recipe.getKeywordList());
+        processIngredient(newRecipe, quantityIngredients);
+
+        return recipeRepository.save(newRecipe);
+    }
     public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients) {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
@@ -39,7 +46,12 @@ public class RecipeService {
         existingRecipe.setInstructions(recipe.getInstructions());
         existingRecipe.setKeywordList(recipe.getKeywordList());
         existingRecipe.emptyIngredients();
+        processIngredient(existingRecipe, quantityIngredients);
 
+        return recipeRepository.save(existingRecipe);
+    }
+
+    private void processIngredient(Recipe existingRecipe,List<QuantityIngredient> quantityIngredients) {
         if(quantityIngredients != null) {
             quantityIngredients.forEach(quantityIngredient -> {
                 // new ingredient
@@ -54,10 +66,7 @@ public class RecipeService {
                 }
             });
         }
-
-        return recipeRepository.save(existingRecipe);
     }
-
     public void deleteRecipe(Long recipeId) {
         recipeRepository.deleteById(recipeId);
     }
