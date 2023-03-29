@@ -3,11 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Recipe } from '../models/recipe';
 import { RecipeFormRequest } from '../models/recipe-form-request';
-;
 import { Ingredient } from '../models/ingredient';
 import { environment } from '../../environments/environment';
-
-
 
 @Injectable({
     providedIn: 'root',
@@ -34,9 +31,7 @@ export class RecipeService {
     }
 
     updateRecipe(id: number, recipeFormRequest: RecipeFormRequest): Observable<Recipe> {
-        const response$: Observable<Recipe> = this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipeFormRequest);
-        response$.subscribe((r) => console.log(r))
-        return response$;
+        return this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipeFormRequest);
     }
 
     deleteRecipe(id: number): Observable<void> {

@@ -13,11 +13,7 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
-                    <textarea
-                        matInput
-                        cdkTextareaAutosize
-                        formControlName="description"
-                    ></textarea>
+                    <textarea matInput cdkTextareaAutosize formControlName="description"></textarea>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
@@ -27,11 +23,7 @@
 
                 <mat-form-field class="longText" appearance="outline">
                     <mat-label>Instructions</mat-label>
-                    <textarea
-                        matInput
-                        cdkTextareaAutosize
-                        formControlName="instructions"
-                    ></textarea>
+                    <textarea matInput cdkTextareaAutosize formControlName="instructions"></textarea>
                 </mat-form-field>
             </div>
             <div formArrayName="ingredients">
@@ -60,7 +52,7 @@
 </form>
 
 <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let ingredient of ingredient$ | async" [value]="ingredient.name">
+    <mat-option *ngFor="let ingredient of ingredients" [value]="ingredient.name">
         {{ ingredient.name }}
     </mat-option>
 </mat-autocomplete>
