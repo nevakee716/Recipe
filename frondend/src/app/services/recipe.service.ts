@@ -1,21 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Recipe } from '../models/recipe';
 import { RecipeFormRequest } from '../models/recipe-form-request';
 import { Ingredient } from '../models/ingredient';
 import { environment } from '../../environments/environment';
-
+import { switchMap, tap } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root',
 })
 export class RecipeService {
     private apiUrl = environment.apiUrl;
-
+    private readonly getRecipesSubject = new Subject<void>();
     constructor(private http: HttpClient) {}
 
     getRecipes(): Observable<Recipe[]> {
-        return this.http.get<Recipe[]>(this.apiUrl);
+        return this.getRecipesSubject.pipe(
+            switchMap(() => this.http.get<Recipe[]>(this.apiUrl)),
+            tap(() => console.log('GET request triggered'))
+        );
+    }
+    triggerGetRecipe(): void {
+        this.getRecipesSubject.next();
     }
 
     getIngredients(): Observable<Ingredient[]> {

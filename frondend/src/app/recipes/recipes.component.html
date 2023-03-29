@@ -16,7 +16,7 @@
             <mat-card-actions>
                 <a mat-button href="/recipes/{{ recipe.id }}" target="_blank">View</a>
                 <a mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank">Edit</a>
-                <button mat-button>Delete</button>
+                <button mat-button (click)="deleteRecipe(recipe.id)">Delete</button>
             </mat-card-actions>
         </mat-card>
     </div>
