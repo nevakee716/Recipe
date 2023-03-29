@@ -7,6 +7,6 @@ export interface Recipe {
     description: string;
     imageUrl: string;
     instructions: string;
-    ingredientsQuantity: QuantityIngredient[];
+    ingredientsQuantity?: QuantityIngredient[];
     comments: Comment[];
 }
