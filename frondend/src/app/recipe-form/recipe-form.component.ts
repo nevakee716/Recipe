@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subscription, lastValueFrom, last } from 'rxjs';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
@@ -30,7 +30,12 @@ export class RecipeFormComponent implements OnInit {
     });
     ingredients: Ingredient[] = [];
 
-    constructor(private _snackBar: MatSnackBar, public route: ActivatedRoute, private recipeService: RecipeService) {}
+    constructor(
+        private router: Router,
+        private _snackBar: MatSnackBar,
+        public route: ActivatedRoute,
+        private recipeService: RecipeService
+    ) {}
 
     ngOnDestroy(): void {
         // tslint:disable-next-line: deprecation
@@ -47,25 +52,31 @@ export class RecipeFormComponent implements OnInit {
         );
         this.ingredient$ = this.recipeService.getIngredients();
         this.refreshIngredients();
+
         this.subscriptions.push(
             this.recipes$.subscribe((recipes) => {
-                let recipe = recipes[0];
-                this.recipeForm = new FormGroup({
-                    name: new FormControl(recipe.name, Validators.required),
-                    description: new FormControl(recipe.description, Validators.required),
-                    imageUrl: new FormControl(recipe.imageUrl),
-                    instructions: new FormControl(recipe.instructions, Validators.required),
-                    ingredients: new FormArray([]),
-                });
-                for (const ingredientQuantity of recipe.ingredientsQuantity || []) {
-                    const ingredientGroup = new FormGroup({
-                        ingredient: new FormControl(ingredientQuantity.ingredient.name, Validators.required),
-                        quantity: new FormControl(ingredientQuantity.quantity, Validators.required),
-                    });
-                    (<FormArray>this.recipeForm?.get('ingredients')).push(ingredientGroup);
+                if (this.recipeId !== 0) {
+                    this.initForm(recipes[0]);
                 }
             })
         );
+    }
+
+    initForm(recipe: Recipe): void {
+        this.recipeForm = new FormGroup({
+            name: new FormControl(recipe.name ?? 'New Recipe', Validators.required),
+            description: new FormControl(recipe.description, Validators.required),
+            imageUrl: new FormControl(recipe.imageUrl),
+            instructions: new FormControl(recipe.instructions, Validators.required),
+            ingredients: new FormArray([]),
+        });
+        for (const ingredientQuantity of recipe.ingredientsQuantity || []) {
+            const ingredientGroup = new FormGroup({
+                ingredient: new FormControl(ingredientQuantity.ingredient.name, Validators.required),
+                quantity: new FormControl(ingredientQuantity.quantity, Validators.required),
+            });
+            (<FormArray>this.recipeForm?.get('ingredients')).push(ingredientGroup);
+        }
     }
 
     async refreshIngredients(): Promise<Ingredient[]> {
