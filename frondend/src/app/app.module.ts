@@ -9,13 +9,42 @@ import { RecipeDetailsComponent } from './recipe-details/recipe-details.componen
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { DemoMaterialModule } from './material-module';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './interceptor/jwt.interceptor';
+import { JwtModule } from '@auth0/angular-jwt';
+import { environment } from '../environments/environment';
+
+export function tokenGetter() {
+    return localStorage.getItem('token');
+}
 
 @NgModule({
-    declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, DemoMaterialModule, FormsModule],
-    providers: [],
+    declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent, LoginComponent],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        AppRoutingModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: tokenGetter,
+                allowedDomains: [environment.apiUrl],
+                disallowedRoutes: [],
+            },
+        }),
+        BrowserAnimationsModule,
+        DemoMaterialModule,
+        FormsModule,
+    ],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptor,
+            multi: true,
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
