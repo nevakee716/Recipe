@@ -1,13 +1,8 @@
 package recipe.demo.Recipe.security.user;
 
+import jakarta.persistence.*;
 import recipe.demo.Recipe.security.token.Token;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -37,12 +32,24 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+
+
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));
+  }
+
+  public UserDTO toDTO() {
+    UserDTO dto = new UserDTO();
+    dto.setId(this.getId());
+    dto.setFirstname(this.getFirstname());
+    dto.setLastname(this.getLastname());
+    dto.setEmail(this.getEmail());
+    dto.setRole(this.getRole());
+    return dto;
   }
 
   @Override
