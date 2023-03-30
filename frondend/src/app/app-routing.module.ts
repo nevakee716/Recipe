@@ -3,12 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-    { path: 'recipes', component: RecipesComponent },
-    { path: 'recipes/edit/:id', component: RecipeFormComponent },
-    { path: 'recipes/:id', component: RecipeDetailsComponent },
-    { path: 'recipes/comment', component: RecipeFormComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'recipes', component: RecipesComponent, canActivate: [AuthGuard] },
+    { path: 'recipes/edit/:id', component: RecipeFormComponent, canActivate: [AuthGuard] },
+    { path: 'recipes/:id', component: RecipeDetailsComponent, canActivate: [AuthGuard] },
+    { path: 'recipes/comment', component: RecipeFormComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/recipes/', pathMatch: 'prefix' },
 ];
 
