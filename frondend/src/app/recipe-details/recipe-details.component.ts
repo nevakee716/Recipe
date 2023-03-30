@@ -5,6 +5,9 @@ import { Observable } from 'rxjs/internal/Observable';
 import { switchMap, map } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { User, Role } from '../models/user';
+import { AuthService } from '../services/auth.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-recipe-details',
@@ -14,9 +17,12 @@ import { ActivatedRoute } from '@angular/router';
 export class RecipeDetailsComponent implements OnInit {
     recipes$: Observable<Recipe[]> | undefined;
     recipeId: number = 0;
-    constructor(public route: ActivatedRoute, private recipeService: RecipeService) {}
+    user: User | undefined;
+    roleEnum: any = Role;
+    constructor(private authService: AuthService, public route: ActivatedRoute, private recipeService: RecipeService) {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
+        this.user = await lastValueFrom(this.authService.getUserDetail());
         const urlParam$ = this.route.paramMap;
         this.recipes$ = urlParam$.pipe(
             switchMap((params) => {

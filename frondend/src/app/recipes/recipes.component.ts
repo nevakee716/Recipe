@@ -6,6 +6,9 @@ import { combineLatest, map, BehaviorSubject } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { lastValueFrom } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+import { User, Role } from '../models/user';
+
 @Component({
     selector: 'app-recipes',
     templateUrl: './recipes.component.html',
@@ -17,12 +20,15 @@ export class RecipesComponent implements OnInit {
     filteredSearch$: Observable<Recipe[]> | undefined;
     searchText$: Observable<string> | undefined;
     searchFormControl = new UntypedFormControl();
-    constructor(private recipeService: RecipeService, private _snackBar: MatSnackBar) {
+    user: User | undefined;
+    roleEnum: any = Role;
+    constructor(private recipeService: RecipeService, private authService: AuthService, private _snackBar: MatSnackBar) {
         this.searchFormControl = new UntypedFormControl();
     }
 
     ngOnInit(): void {
         this.fetchRecipes();
+        this.fetchUserInfo();
     }
 
     async deleteRecipe(id: number) {
@@ -34,6 +40,11 @@ export class RecipesComponent implements OnInit {
             this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
         }
     }
+
+    private async fetchUserInfo(): Promise<void> {
+        this.user = await lastValueFrom(this.authService.getUserDetail());
+    }
+
     private async fetchRecipes(): Promise<void> {
         try {
             this.recipes$ = this.recipeService.getRecipes();

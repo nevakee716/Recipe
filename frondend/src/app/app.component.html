@@ -1,10 +1,11 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
+    <mat-toolbar-row class="topbar">
         <a mat-button routerLink="/recipes" matTooltip="Home" matTooltipPosition="below">
             <mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>
             <span>Recipe</span>
         </a>
+        <div class="user">{{ user?.role }} {{ user?.username }}</div>
     </mat-toolbar-row>
 </mat-toolbar>
 <router-outlet></router-outlet>

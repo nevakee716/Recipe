@@ -14,13 +14,17 @@
             </mat-card-header>
             <mat-card-content> {{ recipe.description }}</mat-card-content>
             <mat-card-actions>
-                <a mat-button href="/recipes/{{ recipe.id }}" target="_blank">View</a>
-                <a mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank">Edit</a>
-                <button mat-button (click)="deleteRecipe(recipe.id)">Delete</button>
+                <a color="primary" mat-button href="/recipes/{{ recipe.id }}" target="_blank"><mat-icon>remove_red_eye</mat-icon> View</a>
+                <a color="primary" *ngIf="user?.role !== roleEnum.USER" mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank"
+                    ><mat-icon>edit</mat-icon> Edit</a
+                >
+                <button color="warn" *ngIf="user?.role == roleEnum.ADMIN" mat-button (click)="deleteRecipe(recipe.id)">
+                    <mat-icon>delete</mat-icon> Delete
+                </button>
             </mat-card-actions>
         </mat-card>
     </div>
-    <div class="addButton">
+    <div *ngIf="user?.role !== roleEnum.USER" class="addButton">
         <a href="/recipes/edit/0" target="_blank">
             <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
                 <mat-icon>add</mat-icon>
