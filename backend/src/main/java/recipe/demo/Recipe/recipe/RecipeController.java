@@ -1,6 +1,7 @@
 package recipe.demo.Recipe.recipe;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,45 +11,59 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
+import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
+import recipe.demo.Recipe.security.user.UserDTO;
+import recipe.demo.Recipe.security.user.UserService;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(path = "api/v1/recipe")
+@RequiredArgsConstructor
 public class RecipeController {
-
+    private final UserService userService;
     private final IngredientService ingredientService;
     private final RecipeService recipeService;
     @Autowired
-    public RecipeController(RecipeService recipeService,IngredientService ingredientService){
+    public RecipeController(UserService userService, RecipeService recipeService,IngredientService ingredientService){
         this.recipeService = recipeService;
         this.ingredientService = ingredientService;
+        this.userService =  userService;
     }
 
 
+    // all user authenticated can read recipe and ingredient
     @GetMapping
-    public List<Recipe> getRecipes(){
-        return recipeService.getRecipes();
+    public ResponseEntity<?> getRecipes(Principal principal){
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        return ResponseEntity.ok(recipeService.getRecipes());
     }
-
-    @PostMapping("/create")
-    public Recipe createRecipe(@RequestBody RecipeFormRequest recipeFormRequest) {
-        return recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients());
-    }
-
     @GetMapping(value = "/{recipeId}")
-    public List<Recipe> getRecipes(@PathVariable Long recipeId){
-        return recipeService.getRecipe(recipeId);
+    public ResponseEntity<?>  getRecipes(Principal principal, @PathVariable Long recipeId){
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        return ResponseEntity.ok(recipeService.getRecipe(recipeId));
     }
-
     @GetMapping(value = "/ingredients")
-    public List<Ingredient> getIngredients(){
-        return ingredientService.getIngredients();
+    public ResponseEntity<?> getIngredients(Principal principal){
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        return ResponseEntity.ok(ingredientService.getIngredients());
+    }
+    @PostMapping("/{recipeId}/comment")
+    public ResponseEntity<?> addCommentToRecipe(Principal principal, @PathVariable Long recipeId, @RequestBody Comment comment) {
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        return ResponseEntity.ok(recipeService.addCommentToRecipe(recipeId, comment));
     }
 
-    @PutMapping("/{recipeId}")
-    public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
-        return recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients());
+
+    // only chef or admin can add recipe
+    @PostMapping("/create")
+    public  ResponseEntity<?>  createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        User user = userService.getUserFromPrincipal(principal);
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
+        }
+        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients()));
     }
 
     @DeleteMapping("/{recipeId}")
@@ -56,9 +71,12 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
     }
 
-    @PostMapping("/{recipeId}/comment")
-    public Comment addCommentToRecipe(@PathVariable Long recipeId, @RequestBody Comment comment) {
-        return recipeService.addCommentToRecipe(recipeId, comment);
+    @PutMapping("/{recipeId}")
+    public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
+        return recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients());
     }
+
+
+
 
 }
