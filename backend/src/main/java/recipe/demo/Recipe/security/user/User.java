@@ -1,6 +1,8 @@
 package recipe.demo.Recipe.security.user;
 
 import jakarta.persistence.*;
+import recipe.demo.Recipe.recipe.Comment;
+import recipe.demo.Recipe.recipe.Recipe;
 import recipe.demo.Recipe.security.token.Token;
 
 import java.util.Collection;
@@ -32,6 +34,10 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @OneToMany(mappedBy = "creator", orphanRemoval = true)
+  private List<Recipe> recipes;
+  @OneToMany(mappedBy = "creator", orphanRemoval = true)
+  private List<Comment> comments;
 
 
   @OneToMany(mappedBy = "user")

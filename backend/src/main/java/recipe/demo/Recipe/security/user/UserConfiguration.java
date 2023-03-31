@@ -15,8 +15,8 @@ public class UserConfiguration {
             return args -> {
                 // Create Recipe 1
                 Optional<User> r = repository.findByEmail("admin");
-                if(!r.isPresent()) {
-                    User adminUser = new User(1,"admin","admin","admin","admin",Role.ADMIN,new ArrayList<>());
+                if(r.isEmpty()) {
+                    User adminUser = new User(1,"admin","admin","admin","admin",Role.ADMIN,new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
                     repository.save(adminUser);
                 }
             };

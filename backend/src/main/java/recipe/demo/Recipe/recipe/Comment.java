@@ -2,6 +2,9 @@ package recipe.demo.Recipe.recipe;
 
 
 import jakarta.persistence.*;
+import recipe.demo.Recipe.security.user.User;
+
+import java.util.List;
 
 @Entity
 @Table
@@ -18,7 +21,12 @@ public class Comment {
     )
     private Long id;
     private String title;
+
     private String comment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
 
     public Long getId() {
         return id;
@@ -42,5 +50,13 @@ public class Comment {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

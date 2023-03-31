@@ -1,6 +1,7 @@
 package recipe.demo.Recipe.recipe;
 
 import jakarta.persistence.*;
+import recipe.demo.Recipe.security.user.User;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +34,17 @@ public class Recipe {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipesIngredients;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
     @ManyToMany
     private List<Keyword> keywordList;
