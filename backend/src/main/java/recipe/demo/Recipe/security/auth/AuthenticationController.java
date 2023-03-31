@@ -46,7 +46,7 @@ public class AuthenticationController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
     }
 
-    return ResponseEntity.ok(userService.getUserFromPrincipal(principal));
+    return ResponseEntity.ok(userService.getUserDTOFromPrincipal(principal));
   }
 
 

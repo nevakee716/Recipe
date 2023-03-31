@@ -34,23 +34,19 @@ public class RecipeController {
 
     // all user authenticated can read recipe and ingredient
     @GetMapping
-    public ResponseEntity<?> getRecipes(Principal principal){
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+    public ResponseEntity<?> getRecipes(){
         return ResponseEntity.ok(recipeService.getRecipes());
     }
     @GetMapping(value = "/{recipeId}")
-    public ResponseEntity<?>  getRecipes(Principal principal, @PathVariable Long recipeId){
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+    public ResponseEntity<?>  getRecipes(@PathVariable Long recipeId){
         return ResponseEntity.ok(recipeService.getRecipe(recipeId));
     }
     @GetMapping(value = "/ingredients")
-    public ResponseEntity<?> getIngredients(Principal principal){
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+    public ResponseEntity<?> getIngredients(){
         return ResponseEntity.ok(ingredientService.getIngredients());
     }
     @PostMapping("/{recipeId}/comment")
     public ResponseEntity<?> addCommentToRecipe(Principal principal, @PathVariable Long recipeId, @RequestBody Comment comment) {
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         return ResponseEntity.ok(recipeService.addCommentToRecipe(recipeId, comment));
     }
 
@@ -58,7 +54,6 @@ public class RecipeController {
     // only chef or admin can add recipe
     @PostMapping("/create")
     public  ResponseEntity<?>  createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         User user = userService.getUserFromPrincipal(principal);
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");

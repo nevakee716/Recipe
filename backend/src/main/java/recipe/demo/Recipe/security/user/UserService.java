@@ -15,7 +15,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDTO getUserFromPrincipal(Principal principal) {
+    public User getUserFromPrincipal(Principal principal) {
+        if (principal == null) {
+            return null;
+        }
+
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+        return user;
+    }
+
+    public UserDTO getUserDTOFromPrincipal(Principal principal) {
         if (principal == null) {
             return null;
         }
