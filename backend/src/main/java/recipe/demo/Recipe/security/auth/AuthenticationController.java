@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recipe.demo.Recipe.security.user.Role;
+import recipe.demo.Recipe.security.user.User;
 import recipe.demo.Recipe.security.user.UserService;
 
 import java.security.Principal;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
   @PostMapping("/register")
   public ResponseEntity<?> register(Principal principal,
-      @RequestBody RegisterRequest request
+      @RequestBody User user
   ) {
     if (principal == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -29,7 +30,7 @@ public class AuthenticationController {
     if (userService.getUserFromPrincipal(principal).getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
     }
-    return ResponseEntity.ok(service.register(request));
+    return ResponseEntity.ok(service.register(user));
   }
 
 
