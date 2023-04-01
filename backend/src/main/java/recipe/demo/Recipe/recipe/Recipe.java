@@ -2,6 +2,7 @@ package recipe.demo.Recipe.recipe;
 
 import jakarta.persistence.*;
 import recipe.demo.Recipe.security.user.User;
+import recipe.demo.Recipe.security.user.UserDTO;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,8 +39,8 @@ public class Recipe {
     @ManyToOne(fetch = FetchType.EAGER)
     private User creator;
 
-    public User getCreator() {
-        return creator;
+    public UserDTO getCreator() {
+        return creator.toDTO();
     }
 
     public void setCreator(User creator) {
