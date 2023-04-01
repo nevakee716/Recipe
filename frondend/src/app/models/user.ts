@@ -1,3 +1,5 @@
+import { Recipe } from './recipe';
+
 export enum Role {
     USER = 'USER',
     CHEF = 'CHEF',
@@ -11,4 +13,5 @@ export interface User {
     username?: string;
     email: string;
     role: Role;
+    recipes: Recipe[];
 }

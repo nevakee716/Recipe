@@ -1,5 +1,6 @@
 import { QuantityIngredient } from './quantity-ingredient';
 import { Comment } from './comment';
+import { User } from './user';
 
 export interface Recipe {
     id: number;
@@ -9,4 +10,5 @@ export interface Recipe {
     instructions: string;
     ingredientsQuantity?: QuantityIngredient[];
     comments: Comment[];
+    creator: User;
 }
