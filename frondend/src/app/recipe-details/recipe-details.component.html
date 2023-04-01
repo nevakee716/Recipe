@@ -3,6 +3,7 @@
         <mat-card-header>
             <mat-card-title>{{ recipe.name }}</mat-card-title>
             <mat-card-subtitle>{{ recipe.description }}</mat-card-subtitle>
+            <mat-card-subtitle> Created by : {{ recipe.creator.firstname }} {{ recipe.creator.lastname }}</mat-card-subtitle>
         </mat-card-header>
         <img [src]="recipe.imageUrl" mat-card-image />
         <mat-card-content class="content">
@@ -16,8 +17,12 @@
             </div>
 
             <div class="instructions">
-                <div mat-subheader>Instructions:</div>
-                <p>{{ recipe.instructions }}</p>
+                <mat-list>
+                    <div mat-subheader>Instructions:</div>
+                    <mat-list-item>
+                        <p>{{ recipe.instructions }}</p>
+                    </mat-list-item>
+                </mat-list>
             </div>
         </mat-card-content>
         <mat-divider class="divider"></mat-divider>
