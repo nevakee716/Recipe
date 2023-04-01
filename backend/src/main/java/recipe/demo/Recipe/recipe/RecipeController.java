@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
-import recipe.demo.Recipe.security.user.UserDTO;
 import recipe.demo.Recipe.security.user.UserService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -49,14 +47,14 @@ public class RecipeController {
         return ResponseEntity.ok(ingredientService.getIngredients());
     }
     @PostMapping("/{recipeId}/comment")
-    public ResponseEntity<?> addCommentToRecipe(Principal principal, @PathVariable Long recipeId, @RequestBody Comment comment) {
+    public ResponseEntity<?> addCommentToRecipe(@PathVariable Long recipeId, @RequestBody Comment comment) {
         return ResponseEntity.ok(recipeService.addCommentToRecipe(recipeId, comment));
     }
 
 
     // only chef or admin can add recipe
     @PostMapping("/create")
-    public  ResponseEntity<?> createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
+    public  ResponseEntity<?> createRecipe(@RequestBody RecipeFormRequest recipeFormRequest) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -74,10 +72,11 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
         recipeService.deleteRecipe(recipeId,user);
+        return ResponseEntity.ok().body("Deletion Done");
     }
 
     @PutMapping("/{recipeId}")
-    public ResponseEntity<?> updateRecipe(Principal principal,@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
+    public ResponseEntity<?> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
