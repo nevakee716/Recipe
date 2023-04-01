@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
@@ -54,11 +57,13 @@ public class RecipeController {
     // only chef or admin can add recipe
     @PostMapping("/create")
     public  ResponseEntity<?>  createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
-        User user = userService.getUserFromPrincipal(principal);
-        if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
-        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients()));
+        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),user));
     }
 
     @DeleteMapping("/{recipeId}")
@@ -67,8 +72,13 @@ public class RecipeController {
     }
 
     @PutMapping("/{recipeId}")
-    public Recipe updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
-        return recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients());
+    public ResponseEntity<?> updateRecipe(Principal principal,@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
+        }
+        return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),user));
     }
 
 
