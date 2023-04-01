@@ -73,7 +73,12 @@ public class RecipeService {
             });
         }
     }
-    public void deleteRecipe(Long recipeId) {
+    public void deleteRecipe(Long recipeId, User user) {
+        Recipe existingRecipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalStateException("Recipe not found"));
+        if(!user.getId().equals(existingRecipe.getCreator().getId()) && user.getRole() == Role.CHEF) {
+            throw new IllegalStateException("Unauthorized to edit this recipe");
+        }
         recipeRepository.deleteById(recipeId);
     }
 

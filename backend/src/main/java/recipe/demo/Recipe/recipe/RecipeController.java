@@ -56,7 +56,7 @@ public class RecipeController {
 
     // only chef or admin can add recipe
     @PostMapping("/create")
-    public  ResponseEntity<?>  createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
+    public  ResponseEntity<?> createRecipe(Principal principal,@RequestBody RecipeFormRequest recipeFormRequest) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -67,8 +67,13 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{recipeId}")
-    public void deleteRecipe(@PathVariable Long recipeId) {
-        recipeService.deleteRecipe(recipeId);
+    public ResponseEntity<?> deleteRecipe(@PathVariable Long recipeId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
+        }
+        recipeService.deleteRecipe(recipeId,user);
     }
 
     @PutMapping("/{recipeId}")
