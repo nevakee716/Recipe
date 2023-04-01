@@ -3,6 +3,8 @@ package recipe.demo.Recipe.security.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
@@ -48,12 +50,20 @@ public class AuthenticationController {
 
   @GetMapping("/userinfo")
   public ResponseEntity<?> getUserInfo(Principal principal) {
-    if (principal == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-    }
 
     return ResponseEntity.ok(userService.getUserDTOFromPrincipal(principal));
   }
 
+
+  @GetMapping("/users")
+  public ResponseEntity<?> getUsers() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    if (user.getRole() != Role.ADMIN) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
+    }
+
+    return ResponseEntity.ok(userService.getAllUsers());
+  }
 
 }

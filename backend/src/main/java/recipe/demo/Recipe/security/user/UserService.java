@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -36,4 +37,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         return user.toDTO();
     }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(user -> user.toDTO()).toList();
+    }
+
+
 }
