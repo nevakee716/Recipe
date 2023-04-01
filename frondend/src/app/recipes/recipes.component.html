@@ -15,8 +15,10 @@
             </mat-card-header>
             <mat-card-content> {{ recipe.description }}</mat-card-content>
             <mat-card-actions>
-                <a color="primary" mat-button href="/recipes/{{ recipe.id }}" target="_blank"><mat-icon>remove_red_eye</mat-icon> View</a>
-                <a color="primary" *ngIf="user?.role !== roleEnum.USER" mat-button href="/recipes/edit/{{ recipe.id }}" target="_blank"
+                <a color="primary" mat-button href="/app/recipes/view/{{ recipe.id }}" target="_blank"
+                    ><mat-icon>remove_red_eye</mat-icon> View</a
+                >
+                <a color="primary" *ngIf="user?.role !== roleEnum.USER" mat-button href="/app/recipes/edit/{{ recipe.id }}" target="_blank"
                     ><mat-icon>edit</mat-icon> Edit</a
                 >
                 <button color="warn" *ngIf="user?.role == roleEnum.ADMIN" mat-button (click)="deleteRecipe(recipe.id)">

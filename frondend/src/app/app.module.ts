@@ -15,13 +15,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
+import { HomeComponent } from './home/home.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
 
 @NgModule({
-    declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent, LoginComponent],
+    declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent, LoginComponent, HomeComponent],
     imports: [
         BrowserModule,
         HttpClientModule,

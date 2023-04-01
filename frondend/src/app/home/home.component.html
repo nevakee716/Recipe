@@ -1,0 +1,29 @@
+<meta name="mobile-web-app-capable" content="yes" />
+<mat-toolbar class="topbar" color="primary">
+    <mat-toolbar-row class="row">
+        <div class="nav">
+            <a class="navLink" mat-button routerLink="/recipes">
+                <mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>
+                <span>Recipe</span>
+            </a>
+            <a class="navLink" mat-button routerLink="/recipes">
+                <span>My creation</span>
+            </a>
+            <a class="navLink" mat-button routerLink="/recipes">
+                <span>My favorites recipes</span>
+            </a>
+            <a class="navLink" mat-button routerLink="/adminUsers">
+                <span>Admin Users</span>
+            </a>
+        </div>
+
+        <button class="user" mat-button (click)="refresh()">Refresh</button>
+
+        <button *ngIf="user$" class="user" mat-button [matMenuTriggerFor]="menu">{{ (user$ | async)?.username }}</button>
+
+        <mat-menu #menu="matMenu">
+            <button (click)="logout()" mat-menu-item>Logout</button>
+        </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
+<router-outlet></router-outlet>

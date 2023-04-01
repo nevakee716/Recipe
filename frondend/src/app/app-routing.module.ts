@@ -5,14 +5,23 @@ import { RecipeDetailsComponent } from './recipe-details/recipe-details.componen
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'recipes', component: RecipesComponent, canActivate: [AuthGuard] },
-    { path: 'recipes/edit/:id', component: RecipeFormComponent, canActivate: [AuthGuard] },
-    { path: 'recipes/:id', component: RecipeDetailsComponent, canActivate: [AuthGuard] },
-    { path: 'recipes/comment', component: RecipeFormComponent, canActivate: [AuthGuard] },
-    { path: '', redirectTo: '/recipes/', pathMatch: 'prefix' },
+    {
+        path: 'app',
+        component: HomeComponent,
+        children: [
+            { path: 'adminUsers', component: RecipesComponent, canActivate: [AuthGuard] },
+            { path: 'recipes', component: RecipesComponent, canActivate: [AuthGuard] },
+            { path: 'recipes/view/:id', component: RecipeDetailsComponent, canActivate: [AuthGuard] },
+            { path: 'recipes/edit/:id', component: RecipeFormComponent, canActivate: [AuthGuard] },
+
+            { path: 'recipes/comment', component: RecipeFormComponent, canActivate: [AuthGuard] },
+        ],
+    },
+    { path: '', redirectTo: 'app/recipes', pathMatch: 'prefix' },
 ];
 
 @NgModule({
