@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs/internal/Observable';
-import { combineLatest, map, BehaviorSubject } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { lastValueFrom } from 'rxjs';
@@ -15,7 +15,6 @@ import { User, Role } from '../models/user';
     styleUrls: ['./recipes.component.scss'],
 })
 export class RecipesComponent implements OnInit {
-    private _recipesSubject = new BehaviorSubject<Recipe[]>([]);
     recipes$: Observable<Recipe[]> | undefined;
     filteredSearch$: Observable<Recipe[]> | undefined;
     searchText$: Observable<string> | undefined;
@@ -53,7 +52,6 @@ export class RecipesComponent implements OnInit {
             const combine$ = combineLatest([this.recipes$, this.searchText$]);
             this.filteredSearch$ = combine$.pipe(
                 map(([recipes, searchText]) => {
-                    console.log('combine');
                     return recipes.filter((recipe) => recipe.name.toLowerCase().includes(searchText.toLowerCase()));
                 })
             );
