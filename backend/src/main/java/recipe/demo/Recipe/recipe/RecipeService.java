@@ -2,6 +2,8 @@ package recipe.demo.Recipe.recipe;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import recipe.demo.Recipe.security.user.Role;
+import recipe.demo.Recipe.security.user.User;
 
 import java.util.List;
 
@@ -27,27 +29,32 @@ public class RecipeService {
     }
 
 
-    public Recipe createRecipe(Recipe recipe,List<QuantityIngredient> quantityIngredients) {
+    public Recipe createRecipe(Recipe recipe, List<QuantityIngredient> quantityIngredients, User creator) {
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.getName());
         newRecipe.setDescription(recipe.getDescription());
         newRecipe.setInstructions(recipe.getInstructions());
+        newRecipe.setCreator(creator);
         newRecipe.setKeywordList(recipe.getKeywordList());
         processIngredient(newRecipe, quantityIngredients);
 
         return recipeRepository.save(newRecipe);
     }
-    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients) {
+    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients, User editor) {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
-        existingRecipe.setName(recipe.getName());
-        existingRecipe.setDescription(recipe.getDescription());
-        existingRecipe.setInstructions(recipe.getInstructions());
-        existingRecipe.setKeywordList(recipe.getKeywordList());
-        existingRecipe.emptyIngredients();
-        processIngredient(existingRecipe, quantityIngredients);
+        if(!editor.getId().equals(existingRecipe.getCreator().getId()) && editor.getRole() == Role.CHEF) {
+            throw new IllegalStateException("Unauthorized to edit this recipe");
+        } else {
+            existingRecipe.setName(recipe.getName());
+            existingRecipe.setDescription(recipe.getDescription());
+            existingRecipe.setInstructions(recipe.getInstructions());
+            existingRecipe.setKeywordList(recipe.getKeywordList());
+            existingRecipe.emptyIngredients();
+            processIngredient(existingRecipe, quantityIngredients);
 
-        return recipeRepository.save(existingRecipe);
+            return recipeRepository.save(existingRecipe);
+        }
     }
 
     private void processIngredient(Recipe existingRecipe,List<QuantityIngredient> quantityIngredients) {
