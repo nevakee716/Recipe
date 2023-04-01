@@ -1,9 +1,26 @@
-<form (submit)="onSubmit()">
-    <mat-form-field>
-        <input matInput placeholder="Email" [(ngModel)]="email" name="email" type="email" required />
-    </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="Password" [(ngModel)]="password" name="password" type="password" required />
-    </mat-form-field>
-    <button mat-raised-button type="submit">Login</button>
-</form>
+<mat-card>
+    <mat-card-title>Welcome To Recipe App</mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <p>
+                <mat-form-field>
+                    <input type="text" matInput placeholder="Email" formControlName="email" />
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field>
+                    <input type="password" matInput placeholder="Password" formControlName="password" />
+                </mat-form-field>
+            </p>
+
+            <p *ngIf="error" class="error">
+                {{ error.error }}
+            </p>
+
+            <div class="button">
+                <button type="submit" mat-button>Login</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
