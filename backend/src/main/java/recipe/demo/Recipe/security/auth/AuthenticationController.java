@@ -35,10 +35,15 @@ public class AuthenticationController {
 
 
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
+  public ResponseEntity<?> authenticate(
       @RequestBody AuthenticationRequest request
   ) {
-    return ResponseEntity.ok(service.authenticate(request));
+    try{
+      return ResponseEntity.ok(service.authenticate(request));
+    } catch (Exception e) {
+      return ResponseEntity.status(403).body(e.getMessage());
+    }
+
   }
 
   @GetMapping("/userinfo")
