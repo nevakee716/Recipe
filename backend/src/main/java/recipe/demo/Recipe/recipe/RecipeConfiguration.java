@@ -3,16 +3,36 @@ package recipe.demo.Recipe.recipe;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import recipe.demo.Recipe.security.auth.AuthenticationService;
+import recipe.demo.Recipe.security.user.Role;
+import recipe.demo.Recipe.security.user.User;
+import recipe.demo.Recipe.security.user.UserRepository;
+import recipe.demo.Recipe.security.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 public class RecipeConfiguration {
 
+
     @Bean
-    CommandLineRunner commandLineRunner(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, KeywordRepository keywordRepository) {
+    CommandLineRunner commandLineRunner(AuthenticationService authService, UserRepository userRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, KeywordRepository keywordRepository) {
+
         return args -> {
+
+            UserService userService = new UserService(userRepository);
+            // Create Admin
+            User adminUser;
+            Optional<User> ru = userRepository.findByEmail("admin");
+
+            if(ru.isEmpty()) {
+                adminUser = new User(1,"admin","admin","admin","admin", Role.ADMIN,new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+                authService.register(adminUser);
+            } else {
+                adminUser = ru.get();
+            }
 
             // Check or Create Default Ingredients
             List<Ingredient> ingredientsList = new ArrayList<>();
@@ -39,6 +59,8 @@ public class RecipeConfiguration {
                 blanquette.addIngredient(ingredientsList.get(4), "700 g");
                 blanquette.addIngredient(ingredientsList.get(3), "50 cl");
                 blanquette.addIngredient(ingredientsList.get(2), "500 g");
+
+                blanquette.setCreator(adminUser);
                 recipeRepository.save(blanquette);
             }
 
@@ -52,6 +74,7 @@ public class RecipeConfiguration {
                 pot.addIngredient(ingredientsList.get(0), "1kg");
                 pot.addIngredient(ingredientsList.get(1), "250g");
                 pot.addIngredient(ingredientsList.get(2), "500g");
+                pot.setCreator(adminUser);
                 recipeRepository.save(pot);
             }
 
