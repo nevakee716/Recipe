@@ -1,7 +1,7 @@
-import { ApplicationRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { map, Observable, Subscription, lastValueFrom } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Role, User } from '../models/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     templateUrl: './users-table.component.html',
     styleUrls: ['./users-table.component.scss'],
 })
-export class UsersTableComponent {
+export class UsersTableComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     displayedColumns = ['id', 'email', 'password', 'firstname', 'lastname', 'role', 'action'];
     users: User[] = [];

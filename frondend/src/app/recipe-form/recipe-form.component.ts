@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import {  FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -38,7 +38,6 @@ export class RecipeFormComponent implements OnInit {
     ) {}
 
     ngOnDestroy(): void {
-        // tslint:disable-next-line: deprecation
         this.subscriptions.forEach((s) => s.unsubscribe);
     }
 
