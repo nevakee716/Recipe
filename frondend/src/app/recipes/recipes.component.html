@@ -15,20 +15,25 @@
             </mat-card-header>
             <mat-card-content> {{ recipe.description }}</mat-card-content>
             <mat-card-actions>
-                <a color="primary" mat-button href="/app/recipes/view/{{ recipe.id }}" target="_blank"
-                    ><mat-icon>remove_red_eye</mat-icon> View</a
+                <a color="primary" mat-button [routerLink]="['/app', 'recipes', 'view', recipe.id]">
+                    <mat-icon>remove_red_eye</mat-icon> View
+                </a>
+                <a
+                    color="primary"
+                    *ngIf="user && user?.role !== roleEnum.USER"
+                    mat-button
+                    [routerLink]="['/app', 'recipes', 'edit', recipe.id]"
                 >
-                <a color="primary" *ngIf="user?.role !== roleEnum.USER" mat-button href="/app/recipes/edit/{{ recipe.id }}" target="_blank"
-                    ><mat-icon>edit</mat-icon> Edit</a
-                >
-                <button color="warn" *ngIf="user?.role == roleEnum.ADMIN" mat-button (click)="deleteRecipe(recipe.id)">
+                    <mat-icon>edit</mat-icon> Edit
+                </a>
+                <button color="warn" *ngIf="user?.role === roleEnum.ADMIN" mat-button (click)="deleteRecipe(recipe.id)">
                     <mat-icon>delete</mat-icon> Delete
                 </button>
             </mat-card-actions>
         </mat-card>
     </div>
-    <div *ngIf="user?.role !== roleEnum.USER" class="addButton">
-        <a href="/recipes/edit/0" target="_blank">
+    <div *ngIf="user && user?.role !== roleEnum.USER" class="addButton">
+        <a href="/recipes/edit/0">
             <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
                 <mat-icon>add</mat-icon>
             </button>
