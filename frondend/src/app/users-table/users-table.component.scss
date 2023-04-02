@@ -1,0 +1,31 @@
+div {
+    display: flex;
+
+    width: 100%;
+    gap: 1rem;
+    flex-direction: column;
+
+    .form {
+        width: calc(100% - 2rem);
+        margin: 1rem;
+    }
+
+    .mat-paginator-range-label {
+        display: none;
+    }
+
+    .mat-form-field {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    /* Border */
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+        color: rgb(255, 255, 255);
+        /* background-color: white; */
+    }
+    /* Font color */
+    input.mat-input-element {
+        color: rgb(0, 0, 0);
+    }
+}

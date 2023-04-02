@@ -25,9 +25,6 @@ public class AuthenticationController {
   public ResponseEntity<?> register(Principal principal,
       @RequestBody User user
   ) {
-    if (principal == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-    }
     // only admin can register other user
     if (userService.getUserFromPrincipal(principal).getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
@@ -46,6 +43,17 @@ public class AuthenticationController {
       return ResponseEntity.status(403).body(e.getMessage());
     }
 
+  }
+
+  @DeleteMapping("/user/{userId}")
+  public ResponseEntity<?> deleteUser(@PathVariable Integer userId,Principal principal) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    if (user.getRole() != Role.ADMIN) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
+    }
+    userService.delete(userId);
+    return ResponseEntity.ok(userService.getUserDTOFromPrincipal(principal));
   }
 
   @GetMapping("/userinfo")

@@ -16,13 +16,23 @@ import { JwtInterceptor } from './interceptor/jwt.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { HomeComponent } from './home/home.component';
+import { UsersTableComponent } from './users-table/users-table.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
 }
 
 @NgModule({
-    declarations: [AppComponent, RecipesComponent, RecipeDetailsComponent, RecipeFormComponent, CommentFormComponent, LoginComponent, HomeComponent],
+    declarations: [
+        AppComponent,
+        RecipesComponent,
+        RecipeDetailsComponent,
+        RecipeFormComponent,
+        CommentFormComponent,
+        LoginComponent,
+        HomeComponent,
+        UsersTableComponent,
+    ],
     imports: [
         BrowserModule,
         HttpClientModule,

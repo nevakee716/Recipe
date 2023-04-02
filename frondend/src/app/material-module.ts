@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
-import { A11yModule } from '@angular/cdk/a11y';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
-import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -27,13 +23,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+
 @NgModule({
     exports: [
-        A11yModule,
-        CdkStepperModule,
         CdkTableModule,
-        CdkTreeModule,
-        DragDropModule,
         MatBadgeModule,
         MatBottomSheetModule,
         MatButtonToggleModule,
@@ -59,6 +56,10 @@ import { MatMenuModule } from '@angular/material/menu';
         MatListModule,
         MatSnackBarModule,
         MatMenuModule,
+        MatTableModule,
+        MatProgressSpinnerModule,
+        MatFormFieldModule,
+        MatSelectModule,
     ],
 })
 export class DemoMaterialModule {}

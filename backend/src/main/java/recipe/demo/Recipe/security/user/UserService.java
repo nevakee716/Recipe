@@ -1,7 +1,9 @@
 package recipe.demo.Recipe.security.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import recipe.demo.Recipe.security.auth.AuthenticationResponse;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,6 +28,11 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         return user;
     }
+
+    public void delete(Integer id) {
+        userRepository.deleteById(id);
+    }
+
 
     public UserDTO getUserDTOFromPrincipal(Principal principal) {
         if (principal == null) {

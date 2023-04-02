@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -22,21 +24,30 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(User user) {
-    var newUser = User.builder()
-        .firstname(user.getFirstname())
-        .lastname(user.getLastname())
-        .email(user.getEmail())
-        .password(passwordEncoder.encode(user.getPassword()))
-        .role(user.getRole())
-        .build();
-    var savedUser = repository.save(newUser);
-    var jwtToken = jwtService.generateToken(savedUser);
-    saveUserToken(savedUser, jwtToken);
-    return AuthenticationResponse.builder()
-        .token(jwtToken)
-        .build();
+  public User register(User user) {
+    Optional<User> existingUser = repository.findById(user.getId());
+    if(existingUser.isPresent()) {
+      User editedUser = existingUser.get();
+      editedUser.setEmail(user.getEmail());
+      editedUser.setFirstname(user.getFirstname());
+      editedUser.setLastname(user.getLastname());
+      editedUser.setRole(user.getRole());
+      if(user.getPassword() != null) editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+      return repository.save(editedUser);
+    } else {
+      var newUser = User.builder()
+              .firstname(user.getFirstname())
+              .lastname(user.getLastname())
+              .email(user.getEmail())
+              .password(passwordEncoder.encode(user.getPassword()))
+              .role(user.getRole())
+              .build();
+      return repository.save(newUser);
+    }
   }
+
+
+
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(

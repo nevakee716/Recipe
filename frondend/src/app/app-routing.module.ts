@@ -6,6 +6,7 @@ import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
+import { UsersTableComponent } from './users-table/users-table.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -13,7 +14,7 @@ const routes: Routes = [
         path: 'app',
         component: HomeComponent,
         children: [
-            { path: 'adminUsers', component: RecipesComponent, canActivate: [AuthGuard] },
+            { path: 'userstable', component: UsersTableComponent, canActivate: [AuthGuard] },
             { path: 'recipes', component: RecipesComponent, canActivate: [AuthGuard] },
             { path: 'recipes/view/:id', component: RecipeDetailsComponent, canActivate: [AuthGuard] },
             { path: 'recipes/edit/:id', component: RecipeFormComponent, canActivate: [AuthGuard] },

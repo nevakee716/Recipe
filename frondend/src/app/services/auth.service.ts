@@ -25,6 +25,30 @@ export class AuthService {
         );
     }
 
+    getUsers(): Observable<User[]> {
+        return this.http.get<User[]>(`${environment.authUrl}/users`).pipe(
+            map((users) => {
+                users.map((u) => {
+                    u.username = u.firstname ? `${u.firstname} ${u.lastname}` : u.email;
+                    return u;
+                });
+                return users;
+            })
+        );
+    }
+
+    delete(user: User): Observable<User> {
+        return this.http.delete<User>(`${environment.authUrl}/user/${user.id}`);
+    }
+
+    saveUser(user: User): Observable<User> {
+        if (user.id === 0) {
+            return this.http.post<User>(`${environment.authUrl}/register`, user);
+        } else {
+            return this.http.put<User>(`${environment.authUrl}/user`, user);
+        }
+    }
+
     triggerRefreshUserInfo(): void {
         this.getUserDetailSubject.next();
     }
