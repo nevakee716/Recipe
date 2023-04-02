@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { NgZone, Component, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs/internal/Observable';
 import { combineLatest, map } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { User, Role } from '../models/user';
 
@@ -14,15 +14,26 @@ import { User, Role } from '../models/user';
     templateUrl: './recipes.component.html',
     styleUrls: ['./recipes.component.scss'],
 })
-export class RecipesComponent implements OnInit {
+export class RecipesComponent implements OnInit, OnDestroy {
+    private subscriptions: Subscription[] = [];
     recipes$: Observable<Recipe[]> | undefined;
     filteredSearch$: Observable<Recipe[]> | undefined;
     searchText$: Observable<string> | undefined;
     searchFormControl = new UntypedFormControl();
     user: User | undefined;
     roleEnum: any = Role;
-    constructor(private recipeService: RecipeService, private authService: AuthService, private _snackBar: MatSnackBar) {
+
+    constructor(
+        private _ngZone: NgZone,
+        private recipeService: RecipeService,
+        private authService: AuthService,
+        private _snackBar: MatSnackBar
+    ) {
         this.searchFormControl = new UntypedFormControl();
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach((s) => s.unsubscribe);
     }
 
     ngOnInit(): void {
@@ -40,8 +51,13 @@ export class RecipesComponent implements OnInit {
         }
     }
 
-    private async fetchUserInfo(): Promise<void> {
-        this.user = await lastValueFrom(this.authService.getUserDetail());
+    private fetchUserInfo(): void {
+        this.subscriptions.push(
+            this.authService.getUserDetail().subscribe((user) => {
+                this.user = user;
+            })
+        );
+        this.authService.triggerRefreshUserInfo();
     }
 
     private async fetchRecipes(): Promise<void> {
