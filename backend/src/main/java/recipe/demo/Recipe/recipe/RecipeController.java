@@ -72,7 +72,7 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
         recipeService.deleteRecipe(recipeId,user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(user.toDTO());
     }
 
     @PutMapping("/{recipeId}")

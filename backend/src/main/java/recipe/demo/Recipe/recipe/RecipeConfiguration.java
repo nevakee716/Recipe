@@ -66,7 +66,7 @@ public class RecipeConfiguration {
 
             // Create Recipe 1
             r = recipeRepository.findByName("Pot au feu");
-            if (r.size() == 0) {
+            if (r.isEmpty()) {
                 Recipe pot = new Recipe(
                         "Pot au feu",
                         "djaijdaz dsqd ojdaiozjd "
