@@ -79,7 +79,7 @@ public class RecipeController {
     public ResponseEntity<?> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        if (user.getRole() == Role.ADMIN || user.getRole() == Role.CHEF) {
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
         return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),user));
