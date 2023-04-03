@@ -16,6 +16,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { HomeComponent } from './home/home.component';
 import { UsersTableComponent } from './users-table/users-table.component';
+import { KeywordFilterComponent } from './keyword-filter/keyword-filter.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -30,6 +31,7 @@ export function tokenGetter() {
         LoginComponent,
         HomeComponent,
         UsersTableComponent,
+        KeywordFilterComponent,
     ],
     imports: [
         BrowserModule,
