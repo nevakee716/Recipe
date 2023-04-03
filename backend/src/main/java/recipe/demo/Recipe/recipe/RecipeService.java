@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,18 +36,18 @@ public class RecipeService {
     }
 
 
-    public Recipe createRecipe(Recipe recipe, List<QuantityIngredient> quantityIngredients, User creator) {
+    public Recipe createRecipe(Recipe recipe, List<QuantityIngredient> quantityIngredients, List<Keyword> keywords,User creator) {
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.getName());
         newRecipe.setDescription(recipe.getDescription());
         newRecipe.setInstructions(recipe.getInstructions());
         newRecipe.setCreator(creator);
-        newRecipe.setKeywordList(recipe.getKeywordList());
+        processKeywords(newRecipe, keywords);
         processIngredient(newRecipe, quantityIngredients);
 
         return recipeRepository.save(newRecipe);
     }
-    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients, User editor) {
+    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients, List<Keyword> keywords, User editor) {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         if(!editor.getId().equals(existingRecipe.getCreator().getId()) && editor.getRole() == Role.CHEF) {
@@ -55,14 +56,32 @@ public class RecipeService {
             existingRecipe.setName(recipe.getName());
             existingRecipe.setDescription(recipe.getDescription());
             existingRecipe.setInstructions(recipe.getInstructions());
-            existingRecipe.setKeywordList(recipe.getKeywordList());
+            processKeywords(existingRecipe, keywords);
             existingRecipe.emptyIngredients();
             processIngredient(existingRecipe, quantityIngredients);
 
             return recipeRepository.save(existingRecipe);
         }
     }
-
+    private void processKeywords(Recipe existingRecipe,List<Keyword> keywords) {
+        List<Keyword> keywordList = new ArrayList<>();
+        if(keywords != null) {
+            keywords.forEach(keyword -> {
+                // new ingredient
+                if (keyword.getId() == 0) {
+                    Keyword newKeyword = new Keyword(keyword.getName());
+                    keywordRepository.save(newKeyword);
+                    keywordList.add(newKeyword);
+                } else {
+                    Long id = keyword.getId();
+                    Keyword existingKeyword = keywordRepository.getReferenceById(id);
+                    keywordList.add(existingKeyword);
+                }
+            });
+        }
+        existingRecipe.setKeywordList(keywordList);
+        recipeRepository.save(existingRecipe);
+    }
     private void processIngredient(Recipe existingRecipe,List<QuantityIngredient> quantityIngredients) {
         if(quantityIngredients != null) {
             quantityIngredients.forEach(quantityIngredient -> {

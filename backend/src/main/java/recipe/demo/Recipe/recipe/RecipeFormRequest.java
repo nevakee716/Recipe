@@ -5,7 +5,15 @@ import java.util.List;
 public class RecipeFormRequest {
     private Recipe recipe;
     private List<QuantityIngredient> quantityIngredients;
+    private List<Keyword> keywords;
 
+    public List<Keyword> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<Keyword> keywords) {
+        this.keywords = keywords;
+    }
 
     public RecipeFormRequest() {
     }

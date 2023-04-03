@@ -79,7 +79,7 @@ public class RecipeController {
         if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
-        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),user));
+        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),recipeFormRequest.getKeywords(),user));
     }
 
     @DeleteMapping("/{recipeId}")
@@ -101,7 +101,7 @@ public class RecipeController {
         if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
-        return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),user));
+        return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),recipeFormRequest.getKeywords(),user));
     }
 
 
