@@ -48,8 +48,19 @@ public class RecipeController {
     }
     @PostMapping("/{recipeId}/comment")
     public ResponseEntity<?> addCommentToRecipe(@PathVariable Long recipeId, @RequestBody Comment comment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        comment.setCreator(user);
         return ResponseEntity.ok(recipeService.addCommentToRecipe(recipeId, comment));
     }
+    @PostMapping("/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, @RequestBody Recipe recipe ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        recipeService.deleteComment(commentId,user,recipe);
+        return ResponseEntity.ok(user.toDTO());
+    }
+
 
 
     // only chef or admin can add recipe
@@ -74,6 +85,7 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId,user);
         return ResponseEntity.ok(user.toDTO());
     }
+
 
     @PutMapping("/{recipeId}")
     public ResponseEntity<?> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {

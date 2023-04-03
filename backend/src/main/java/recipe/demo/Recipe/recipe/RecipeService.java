@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -81,10 +82,27 @@ public class RecipeService {
         }
         recipeRepository.deleteById(recipeId);
     }
+    public void deleteComment(Long commentId, User user, Recipe recipe) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("Comment not found"));
+        if(!user.getId().equals(existingComment.getCreator().getId()) && user.getRole() != Role.ADMIN) {
+            throw new IllegalStateException("Unauthorized to edit this recipe");
+        }
+        Recipe existingRecipe = recipeRepository.findById(recipe.getId())
+                .orElseThrow(() -> new IllegalStateException("Comment not found"));
+        recipe.removeComment(commentId);
+        recipeRepository.save(recipe);
+        commentRepository.deleteById(commentId);
+
+    }
+
+
+
 
     public Comment addCommentToRecipe(Long recipeId, Comment comment) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
+        comment.setCreationDate(new Date());
         commentRepository.save(comment);
         recipe.getCommentList().add(comment);
         recipeRepository.save(recipe);
