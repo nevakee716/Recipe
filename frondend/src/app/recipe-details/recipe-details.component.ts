@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs/internal/Observable';
-import { switchMap, map } from 'rxjs';
-import { UntypedFormControl } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { User, Role } from '../models/user';
+import { User, Role, RecipeAccess } from '../models/user';
 import { AuthService } from '../services/auth.service';
-import { lastValueFrom, Subscription } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-recipe-details',
@@ -22,10 +23,15 @@ export class RecipeDetailsComponent implements OnInit {
     user: User | undefined;
     user$: Observable<User> | undefined;
     roleEnum: any = Role;
-    constructor(private authService: AuthService, public route: ActivatedRoute, private recipeService: RecipeService) {}
+    constructor(
+        private _snackBar: MatSnackBar,
+        private authService: AuthService,
+        public route: ActivatedRoute,
+        private recipeService: RecipeService,
+        private router: Router
+    ) {}
 
     ngOnDestroy(): void {
-        // tslint:disable-next-line: deprecation
         this.subscriptions.forEach((s) => s.unsubscribe);
     }
 
@@ -49,5 +55,19 @@ export class RecipeDetailsComponent implements OnInit {
                 this.user = user;
             })
         );
+        this.authService.triggerRefreshUserInfo();
+    }
+    canEditRecipe(recipe: Recipe): boolean {
+        return RecipeAccess.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
+    }
+
+    async deleteRecipe(id: number) {
+        try {
+            await lastValueFrom(this.recipeService.deleteRecipe(id));
+            this._snackBar.open('Recipe Successfully Deleted', 'Close');
+            this.router.navigate(['/app/recipes']);
+        } catch (e: any) {
+            this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
+        }
     }
 }

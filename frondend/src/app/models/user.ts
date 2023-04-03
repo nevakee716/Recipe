@@ -6,6 +6,11 @@ export enum Role {
     ADMIN = 'ADMIN',
 }
 
+export enum RecipeAccess {
+    READ = 'READ',
+    EDIT = 'EDIT',
+}
+
 export interface User {
     id: number;
     firstname: string;

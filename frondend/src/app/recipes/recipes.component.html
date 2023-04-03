@@ -18,15 +18,10 @@
                 <a color="primary" mat-button [routerLink]="['/app', 'recipes', 'view', recipe.id]">
                     <mat-icon>remove_red_eye</mat-icon> View
                 </a>
-                <a
-                    color="primary"
-                    *ngIf="user && user?.role !== roleEnum.USER"
-                    mat-button
-                    [routerLink]="['/app', 'recipes', 'edit', recipe.id]"
-                >
+                <a color="primary" *ngIf="canEditRecipe(recipe)" mat-button [routerLink]="['/app', 'recipes', 'edit', recipe.id]">
                     <mat-icon>edit</mat-icon> Edit
                 </a>
-                <button color="warn" *ngIf="user?.role === roleEnum.ADMIN" mat-button (click)="deleteRecipe(recipe.id)">
+                <button color="warn" *ngIf="canEditRecipe(recipe)" mat-button (click)="deleteRecipe(recipe.id)">
                     <mat-icon>delete</mat-icon> Delete
                 </button>
             </mat-card-actions>

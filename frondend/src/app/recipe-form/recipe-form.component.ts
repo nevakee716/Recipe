@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -132,5 +132,16 @@ export class RecipeFormComponent implements OnInit {
 
     getControls() {
         return (this.recipeForm.get('ingredients') as FormArray).controls;
+    }
+    async deleteRecipe() {
+        try {
+            if (this.recipeId != 0) {
+                await lastValueFrom(this.recipeService.deleteRecipe(this.recipeId));
+                this._snackBar.open('Recipe Successfully Deleted', 'Close');
+            }
+            this.router.navigate(['/app/recipes']);
+        } catch (e: any) {
+            this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
+        }
     }
 }

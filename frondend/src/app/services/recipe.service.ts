@@ -6,6 +6,8 @@ import { RecipeFormRequest } from '../models/recipe-form-request';
 import { Ingredient } from '../models/ingredient';
 import { environment } from '../../environments/environment';
 import { switchMap, tap } from 'rxjs/operators';
+import { User, Role, RecipeAccess } from '../models/user';
+
 @Injectable({
     providedIn: 'root',
 })
@@ -42,5 +44,12 @@ export class RecipeService {
 
     deleteRecipe(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+
+    checkRecipeAccessRight(recipe: Recipe, user: User | undefined): RecipeAccess {
+        if (!user) return RecipeAccess.READ;
+        if (user.role === Role.ADMIN) return RecipeAccess.EDIT;
+        if (recipe?.creator?.id === user.id) return RecipeAccess.EDIT;
+        return RecipeAccess.READ;
     }
 }
