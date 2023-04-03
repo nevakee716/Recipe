@@ -6,9 +6,9 @@
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
-
+    <app-keyword-filter id="keywordFilter" [allKeywords]="allKeywords" (keywordSelected)="keywordSelected($event)"></app-keyword-filter>
     <div class="recipes">
-        <mat-card *ngFor="let recipe of filteredSearch$ | async" class="recipe">
+        <mat-card *ngFor="let recipe of getFilteredRecipes()" class="recipe">
             <mat-card-header>
                 <mat-card-title> {{ recipe.name }}</mat-card-title>
                 <mat-card-subtitle> {{ recipe.creator.firstname }} {{ recipe.creator.lastname }}</mat-card-subtitle>
@@ -35,9 +35,9 @@
         </a>
     </div>
 </div>
-
+<pre>{{ selectedKeywords | json }}</pre>
 <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let recipe of recipes$ | async" [value]="recipe.name">
+    <mat-option *ngFor="let recipe of recipes" [value]="recipe.name">
         {{ recipe.name }}
     </mat-option>
 </mat-autocomplete>

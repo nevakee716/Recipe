@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { switchMap, tap } from 'rxjs/operators';
 import { User, Role, Access } from '../models/user';
 import { Comment } from '../models/comment';
+import { Keyword } from '../models/keyword';
 
 @Injectable({
     providedIn: 'root',
@@ -29,6 +30,10 @@ export class RecipeService {
 
     getIngredients(): Observable<Ingredient[]> {
         return this.http.get<Ingredient[]>(`${this.apiUrl}/ingredients`);
+    }
+
+    getKeywords(): Observable<Keyword[]> {
+        return this.http.get<Keyword[]>(`${this.apiUrl}/keywords`);
     }
 
     getRecipe(id: number): Observable<Recipe[]> {
