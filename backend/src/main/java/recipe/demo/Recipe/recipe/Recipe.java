@@ -49,7 +49,7 @@ public class Recipe {
 
     @ManyToMany
     private List<Keyword> keywordList;
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(orphanRemoval = true)
     private List<Comment> commentList;
 
     public Recipe() {
@@ -108,6 +108,15 @@ public class Recipe {
             iterator.remove();
         }
     }
+
+    public void removeComment(Long commentId) {
+        Iterator<Comment> iterator = this.getCommentList().iterator();
+        while (iterator.hasNext()) {
+            Comment c = iterator.next();
+            if(c.getId() == commentId) iterator.remove();
+        }
+    }
+
 
 
 
