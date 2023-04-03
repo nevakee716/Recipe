@@ -26,34 +26,61 @@
                     <textarea matInput cdkTextareaAutosize formControlName="instructions"></textarea>
                 </mat-form-field>
             </div>
-            <div formArrayName="ingredients">
-                <div *ngFor="let ingredientCtrl of getControls(); let i = index">
-                    <div class="ingredients" [formGroupName]="i">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ingredient</mat-label>
-                            <input matInput [matAutocomplete]="auto" formControlName="ingredient" />
-                        </mat-form-field>
+            <div class="ingredientKeyword">
+                <div formArrayName="ingredients">
+                    <div>
+                        <div *ngFor="let ingredientCtrl of getControls('ingredients'); let i = index">
+                            <div class="ingredientKeywordForm" [formGroupName]="i">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ingredient</mat-label>
+                                    <input matInput [matAutocomplete]="autoIngredients" formControlName="ingredient" />
+                                </mat-form-field>
 
-                        <mat-form-field appearance="outline">
-                            <mat-label>Quantity</mat-label>
-                            <input matInput formControlName="quantity" />
-                        </mat-form-field>
-                        <button mat-fab color="warn" type="button" (click)="onRemoveIngredient(i)"><mat-icon>remove</mat-icon></button>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Quantity</mat-label>
+                                    <input matInput formControlName="quantity" />
+                                </mat-form-field>
+                                <button mat-fab color="warn" type="button" (click)="onRemoveIngredient(i)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                    <button mat-raised-button class="add" color="accent" type="button" (click)="onAddIngredient()">Add Ingredient</button>
+                </div>
+                <div formArrayName="keywords">
+                    <div>
+                        <div *ngFor="let keywordCtrl of getControls('keywords'); let i = index">
+                            <div class="ingredientKeywordForm" [formGroupName]="i">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Keyword</mat-label>
+                                    <input matInput [matAutocomplete]="autoKeywords" formControlName="keyword" />
+                                </mat-form-field>
+
+                                <button mat-fab color="warn" type="button" (click)="onRemoveKeyword(i)"><mat-icon>remove</mat-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button mat-raised-button class="add" color="accent" type="button" (click)="onAddKeyword()">Add Keyword</button>
                 </div>
             </div>
-            <button mat-raised-button color="accent" type="button" (click)="onAddIngredient()">Add Ingredient</button>
         </mat-card-content>
         <mat-divider></mat-divider>
-        <mat-card-actions align="start">
+        <mat-card-actions class="actions" align="start">
             <button mat-raised-button type="submit" color="primary">Submit</button>
             <button mat-raised-button type="warn" color="warn" mat-button (click)="deleteRecipe()">Delete</button>
         </mat-card-actions>
     </mat-card>
 </form>
 
-<mat-autocomplete #auto="matAutocomplete">
+<mat-autocomplete #autoIngredients="matAutocomplete">
     <mat-option *ngFor="let ingredient of ingredients" [value]="ingredient.name">
         {{ ingredient.name }}
+    </mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #autoKeywords="matAutocomplete">
+    <mat-option *ngFor="let keyword of keywords" [value]="keyword.name">
+        {{ keyword.name }}
     </mat-option>
 </mat-autocomplete>

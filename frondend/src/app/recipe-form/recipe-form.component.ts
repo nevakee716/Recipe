@@ -8,8 +8,10 @@ import { Ingredient } from '../models/ingredient';
 import { QuantityIngredient } from '../models/quantity-ingredient';
 import { Recipe } from '../models/recipe';
 import { RecipeFormRequest } from '../models/recipe-form-request';
+import { Keyword } from '../models/keyword';
 import { RecipeService } from '../services/recipe.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { KeywordFilterComponent } from '../keyword-filter/keyword-filter.component';
 
 @Component({
     selector: 'app-recipe-form',
@@ -19,7 +21,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RecipeFormComponent implements OnInit {
     private subscriptions: Subscription[] = [];
     recipes$: Observable<Recipe[]> | undefined;
+    keywords$: Observable<Keyword[]> | undefined;
     ingredient$: Observable<Ingredient[]> | undefined;
+
     recipeId: number = 0;
     recipeForm: FormGroup = new FormGroup({
         name: new FormControl(null, Validators.required),
@@ -27,8 +31,11 @@ export class RecipeFormComponent implements OnInit {
         imageUrl: new FormControl(null),
         instructions: new FormControl(null, Validators.required),
         ingredients: new FormArray([]),
+        keywords: new FormArray([]),
     });
+
     ingredients: Ingredient[] = [];
+    keywords: Keyword[] = [];
 
     constructor(
         private router: Router,
@@ -50,7 +57,12 @@ export class RecipeFormComponent implements OnInit {
             })
         );
         this.ingredient$ = this.recipeService.getIngredients();
-        this.refreshIngredients();
+
+        this.keywords$ = this.recipeService.getKeywords();
+        this.refreshKeywordAndIngredients();
+
+        this.subscriptions.push(this.ingredient$.subscribe((ingredients) => (this.ingredients = ingredients)));
+        this.subscriptions.push(this.keywords$.subscribe((keywords) => (this.keywords = keywords)));
 
         this.subscriptions.push(
             this.recipes$.subscribe((recipes) => {
@@ -68,7 +80,14 @@ export class RecipeFormComponent implements OnInit {
             imageUrl: new FormControl(recipe.imageUrl),
             instructions: new FormControl(recipe.instructions, Validators.required),
             ingredients: new FormArray([]),
+            keywords: new FormArray([]),
         });
+        for (const keyword of recipe.keywordList || []) {
+            const keywordGroup = new FormGroup({
+                keyword: new FormControl(keyword.name, Validators.required),
+            });
+            (<FormArray>this.recipeForm?.get('keywords')).push(keywordGroup);
+        }
         for (const ingredientQuantity of recipe.ingredientsQuantity || []) {
             const ingredientGroup = new FormGroup({
                 ingredient: new FormControl(ingredientQuantity.ingredient.name, Validators.required),
@@ -78,9 +97,9 @@ export class RecipeFormComponent implements OnInit {
         }
     }
 
-    async refreshIngredients(): Promise<Ingredient[]> {
+    async refreshKeywordAndIngredients(): Promise<void> {
         if (this.ingredient$) this.ingredients = await lastValueFrom(this.ingredient$);
-        return this.ingredients;
+        if (this.keywords$) this.keywords = await lastValueFrom(this.keywords$);
     }
 
     async onSubmit() {
@@ -100,6 +119,11 @@ export class RecipeFormComponent implements OnInit {
                 };
                 return r;
             }),
+            keywords: this.recipeForm?.value.keywords.map((i: any) => {
+                let k: Keyword | undefined = this.keywords.find((k: Keyword) => k.name === i.keyword);
+                if (k === undefined) k = { id: 0, name: i.keyword };
+                return k;
+            }),
         };
         let answered: Recipe;
         try {
@@ -114,7 +138,7 @@ export class RecipeFormComponent implements OnInit {
         } catch (e: any) {
             this._snackBar.open(`Issue when submitting the recipe : ${e?.error?.error}`, 'Close');
         }
-        this.refreshIngredients();
+        this.refreshKeywordAndIngredients();
     }
 
     onAddIngredient() {
@@ -130,9 +154,22 @@ export class RecipeFormComponent implements OnInit {
         (<FormArray>this.recipeForm?.get('ingredients')).removeAt(index);
     }
 
-    getControls() {
-        return (this.recipeForm.get('ingredients') as FormArray).controls;
+    onAddKeyword() {
+        const keywordGroup = new FormGroup({
+            keyword: new FormControl(null, Validators.required),
+        });
+
+        (<FormArray>this.recipeForm?.get('keywords')).push(keywordGroup);
     }
+
+    onRemoveKeyword(index: number) {
+        (<FormArray>this.recipeForm?.get('keywords')).removeAt(index);
+    }
+
+    getControls(item: string) {
+        return (this.recipeForm.get(item) as FormArray).controls;
+    }
+
     async deleteRecipe() {
         try {
             if (this.recipeId != 0) {

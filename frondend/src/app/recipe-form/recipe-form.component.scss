@@ -3,10 +3,11 @@
     flex-direction: column;
 }
 
-.ingredients {
+.ingredientKeywordForm {
     display: flex;
     gap: 0.5rem;
 }
+
 mat-card-content {
     margin-top: 1.5rem;
 }
@@ -16,4 +17,27 @@ mat-divider {
 
 textarea {
     height: 500px;
+}
+
+.ingredientKeyword {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    column-gap: 3rem;
+    row-gap: 2rem;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        button.add {
+            width: fit-content;
+        }
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
 }
