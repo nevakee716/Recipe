@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
-import { CommentFormComponent } from './comment-form/comment-form.component';
 import { DemoMaterialModule } from './material-module';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
@@ -28,7 +27,6 @@ export function tokenGetter() {
         RecipesComponent,
         RecipeDetailsComponent,
         RecipeFormComponent,
-        CommentFormComponent,
         LoginComponent,
         HomeComponent,
         UsersTableComponent,
