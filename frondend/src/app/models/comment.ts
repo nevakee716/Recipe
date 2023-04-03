@@ -1,10 +1,9 @@
 import { User } from './user';
 
 export interface Comment {
-    id: number;
-    author: string;
+    id?: number;
     title: string;
     content: string;
-    date: Date;
-    creator: User;
+    creationDate?: Date;
+    creator?: User;
 }

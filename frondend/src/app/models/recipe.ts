@@ -9,6 +9,6 @@ export interface Recipe {
     imageUrl: string;
     instructions: string;
     ingredientsQuantity?: QuantityIngredient[];
-    comments: Comment[];
+    commentList: Comment[];
     creator: User;
 }
