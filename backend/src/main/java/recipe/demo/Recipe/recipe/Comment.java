@@ -3,7 +3,9 @@ package recipe.demo.Recipe.recipe;
 
 import jakarta.persistence.*;
 import recipe.demo.Recipe.security.user.User;
+import recipe.demo.Recipe.security.user.UserDTO;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,7 +24,29 @@ public class Comment {
     private Long id;
     private String title;
 
-    private String comment;
+    private Date creationDate;
+
+    @Column(length = 5000)
+    private String content;
+
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User creator;
@@ -44,16 +68,9 @@ public class Comment {
         this.title = title;
     }
 
-    public String getComment() {
-        return comment;
-    }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public User getCreator() {
-        return creator;
+    public UserDTO getCreator() {
+        return creator.toDTO();
     }
 
     public void setCreator(User creator) {
