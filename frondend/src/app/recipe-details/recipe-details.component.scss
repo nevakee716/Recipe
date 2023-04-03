@@ -1,21 +1,36 @@
-mat-card {
-    margin: 1rem;
+.wrapper {
+    .recipeCard {
+        margin: 1rem;
 
-    .content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        .ingredients {
-            width: 12rem;
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            .ingredients {
+                width: 12rem;
+            }
+            .instructions {
+                flex: auto;
+            }
         }
-        .instructions {
-            flex: auto;
-        }
-
-
-
         .comments {
             width: 100%;
+            margin-bottom: 1rem;
+            .newComment {
+                width: calc(100% - 2rem);
+            }
+            .existingComment {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 1rem;
+
+                .commentCard : {
+                    flex: auto;
+                    width: 25rem;
+                    max-width: 40rem;
+                }
+            }
         }
     }
 }

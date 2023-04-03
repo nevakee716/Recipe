@@ -1,5 +1,5 @@
 <div *ngIf="recipe" class="wrapper">
-    <mat-card>
+    <mat-card class="recipeCard">
         <mat-card-header>
             <mat-card-title>{{ recipe.name }}</mat-card-title>
             <mat-card-subtitle>{{ recipe.description }}</mat-card-subtitle>
@@ -25,22 +25,48 @@
                 </mat-list>
             </div>
         </mat-card-content>
-        <mat-divider class="divider"></mat-divider>
-        <mat-card-content class="comments">
-            <div mat-subheader>Comments :</div>
-            <mat-list>
-                <mat-list-item *ngFor="let comment of recipe.comments">
-                    <h4 mat-line>{{ comment.title }}</h4>
-                    <p mat-line>
-                        <span>By {{ comment.author }} on {{ comment.date | date }}</span>
-                    </p>
-                    <p mat-line>{{ comment.content }}</p>
-                </mat-list-item>
-            </mat-list>
-        </mat-card-content>
         <mat-card-actions *ngIf="user && canEditRecipe(recipe)" align="start">
             <a color="primary" mat-button [routerLink]="['/app', 'recipes', 'edit', recipe.id]"><mat-icon>edit</mat-icon> Edit</a>
             <button color="warn" mat-button (click)="deleteRecipe(recipe.id)"><mat-icon>delete</mat-icon> Delete</button>
         </mat-card-actions>
+        <mat-divider class="divider"></mat-divider>
+
+        <mat-card-content class="comments">
+            <div mat-subheader>Comments :</div>
+            <div class="existingComment">
+                <mat-card *ngFor="let comment of recipe.commentList; let index = index" class="commentCard">
+                    <mat-card-header>
+                        <mat-card-title> {{ comment.title }}</mat-card-title>
+                        <mat-card-subtitle>
+                            By {{ comment.creator?.firstname }} {{ comment.creator?.lastname }} on
+                            {{ comment.creationDate | date }}</mat-card-subtitle
+                        >
+                    </mat-card-header>
+                    <mat-card-content> {{ comment.content }}</mat-card-content>
+                    <mat-card-actions>
+                        <button
+                            color="warn"
+                            *ngIf="comment.id != undefined && canEditComment(comment)"
+                            mat-button
+                            (click)="deleteComment(comment.id, index)"
+                        >
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+                <mat-form-field class="title">
+                    <mat-label>Title</mat-label>
+                    <input matInput formControlName="title" />
+                </mat-form-field>
+                <mat-form-field class="newComment">
+                    <mat-label>Leave a comment (Please be nice)</mat-label>
+                    <textarea formControlName="content" cdkTextareaAutosize matInput placeholder="Ex. It makes me feel..."></textarea>
+                </mat-form-field>
+                <button mat-raised-button type="submit" color="primary">Submit</button>
+            </form>
+        </mat-card-content>
+        <mat-divider class="divider"></mat-divider>
     </mat-card>
 </div>

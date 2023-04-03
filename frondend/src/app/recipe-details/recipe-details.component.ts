@@ -4,11 +4,13 @@ import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { User, Role, RecipeAccess } from '../models/user';
+import { User, Role, Access } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { Comment } from '../models/comment';
 
 @Component({
     selector: 'app-recipe-details',
@@ -23,12 +25,19 @@ export class RecipeDetailsComponent implements OnInit {
     user: User | undefined;
     user$: Observable<User> | undefined;
     roleEnum: any = Role;
+
+    commentForm = this.formBuilder.group({
+        title: '',
+        content: '',
+    });
+
     constructor(
         private _snackBar: MatSnackBar,
         private authService: AuthService,
         public route: ActivatedRoute,
         private recipeService: RecipeService,
-        private router: Router
+        private router: Router,
+        private formBuilder: FormBuilder
     ) {}
 
     ngOnDestroy(): void {
@@ -58,7 +67,24 @@ export class RecipeDetailsComponent implements OnInit {
         this.authService.triggerRefreshUserInfo();
     }
     canEditRecipe(recipe: Recipe): boolean {
-        return RecipeAccess.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
+        return Access.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
+    }
+
+    canEditComment(comment: Comment): boolean {
+        return Access.EDIT === this.recipeService.checkCommentAccessRight(comment, this.user);
+    }
+
+    async deleteComment(id: number, index: number) {
+        try {
+            if (this.recipe) {
+                await lastValueFrom(this.recipeService.deleteComment(id, this.recipe));
+
+                this.recipe?.commentList.splice(index, 1);
+                this._snackBar.open('Comment Successfully Deleted', 'Close');
+            }
+        } catch (e: any) {
+            this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
+        }
     }
 
     async deleteRecipe(id: number) {
@@ -68,6 +94,19 @@ export class RecipeDetailsComponent implements OnInit {
             this.router.navigate(['/app/recipes']);
         } catch (e: any) {
             this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
+        }
+    }
+
+    async onSubmit() {
+        if (this.commentForm.valid) {
+            try {
+                const newComment: Comment = await lastValueFrom(this.recipeService.addComment(this.recipeId, this.commentForm.value));
+                this.recipe?.commentList.push(newComment);
+                this.commentForm.reset();
+                this._snackBar.open('Comment Successfully Posted', 'Close');
+            } catch (e: any) {
+                this._snackBar.open(`Issue when submitting comment : ${e?.error?.error}`, 'Close');
+            }
         }
     }
 }
