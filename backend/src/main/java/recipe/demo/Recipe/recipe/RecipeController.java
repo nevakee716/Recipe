@@ -42,6 +42,13 @@ public class RecipeController {
     public ResponseEntity<?>  getRecipes(@PathVariable Long recipeId){
         return ResponseEntity.ok(recipeService.getRecipe(recipeId));
     }
+
+    @GetMapping(value = "/keywords")
+    public ResponseEntity<?> getKeywords(){
+        return ResponseEntity.ok(recipeService.getKeywords());
+    }
+
+
     @GetMapping(value = "/ingredients")
     public ResponseEntity<?> getIngredients(){
         return ResponseEntity.ok(ingredientService.getIngredients());

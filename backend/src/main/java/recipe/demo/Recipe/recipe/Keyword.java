@@ -2,7 +2,6 @@ package recipe.demo.Recipe.recipe;
 
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -28,5 +27,23 @@ public class Keyword {
         this.name = name;
     }
 
+    public Keyword() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

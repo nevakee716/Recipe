@@ -34,6 +34,18 @@ public class RecipeConfiguration {
                 adminUser = ru.get();
             }
 
+            // Check or Create Default Keyword
+            List<Keyword> keywordsList = new ArrayList<>();
+            List.of("Plat en sauce", "Chaud", "Viande", "Lactose", "Froid","Grillade").forEach(keywordName -> {
+                List<Keyword> r = keywordRepository.findByName(keywordName);
+                if (r.size() > 0) keywordsList.add(r.get(0));
+                else {
+                    Keyword newKeyword = new Keyword(keywordName);
+                    keywordRepository.save(newKeyword);
+                    keywordsList.add(newKeyword);
+                }
+            });
+
             // Check or Create Default Ingredients
             List<Ingredient> ingredientsList = new ArrayList<>();
             List.of("Boeuf", "Navet", "Carotte", "Crème", "Veau").forEach(ing -> {
@@ -59,7 +71,7 @@ public class RecipeConfiguration {
                 blanquette.addIngredient(ingredientsList.get(4), "700 g");
                 blanquette.addIngredient(ingredientsList.get(3), "50 cl");
                 blanquette.addIngredient(ingredientsList.get(2), "500 g");
-
+                blanquette.setKeywordList(List.of(keywordsList.get(0),keywordsList.get(1),keywordsList.get(2),keywordsList.get(3)));
                 blanquette.setCreator(adminUser);
                 recipeRepository.save(blanquette);
             }
@@ -74,12 +86,13 @@ public class RecipeConfiguration {
                 pot.addIngredient(ingredientsList.get(0), "1kg");
                 pot.addIngredient(ingredientsList.get(1), "250g");
                 pot.addIngredient(ingredientsList.get(2), "500g");
+                pot.setKeywordList(List.of(keywordsList.get(0),keywordsList.get(1),keywordsList.get(2)));
                 pot.setCreator(adminUser);
                 recipeRepository.save(pot);
             }
 
 
-            Keyword plat = new Keyword("Plat en Sauce");
+
 
 
         };

@@ -13,13 +13,14 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final CommentRepository commentRepository;
-
+    private final KeywordRepository keywordRepository;
     private final IngredientRepository ingredientRepository;
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository,CommentRepository commentRepository,IngredientRepository ingredientRepository) {
+    public RecipeService(KeywordRepository keywordRepository,RecipeRepository recipeRepository,CommentRepository commentRepository,IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.commentRepository = commentRepository;
         this.ingredientRepository = ingredientRepository;
+        this.keywordRepository = keywordRepository;
     }
 
     public List<Recipe> getRecipes() {
@@ -27,6 +28,10 @@ public class RecipeService {
     }
     public List<Recipe> getRecipe(Long recipeId) {
         return recipeRepository.findAllById(List.of(recipeId));
+    }
+
+    public List<Keyword> getKeywords() {
+        return keywordRepository.findAll();
     }
 
 
@@ -82,6 +87,11 @@ public class RecipeService {
         }
         recipeRepository.deleteById(recipeId);
     }
+
+
+
+
+
     public void deleteComment(Long commentId, User user, Recipe recipe) {
         Comment existingComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("Comment not found"));
@@ -95,9 +105,6 @@ public class RecipeService {
         commentRepository.deleteById(commentId);
 
     }
-
-
-
 
     public Comment addCommentToRecipe(Long recipeId, Comment comment) {
         Recipe recipe = recipeRepository.findById(recipeId)
