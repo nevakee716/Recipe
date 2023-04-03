@@ -109,7 +109,7 @@ export class RecipeFormComponent implements OnInit {
             } else {
                 answered = await lastValueFrom(this.recipeService.createRecipe(recipeForm));
                 this._snackBar.open('Recipe Successfully Created', 'Close');
-                this.router.navigate(['/', 'recipes', 'edit', answered.id]);
+                this.router.navigate(['/', 'app', 'recipes', 'edit', answered.id]);
             }
         } catch (e: any) {
             this._snackBar.open(`Issue when submitting the recipe : ${e?.error?.error}`, 'Close');
