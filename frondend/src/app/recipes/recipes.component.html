@@ -33,8 +33,8 @@
         </mat-card>
     </div>
     <div *ngIf="user && user?.role !== roleEnum.USER" class="addButton">
-        <a href="/recipes/edit/0">
-            <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
+        <a [routerLink]="['/app', 'recipes', 'edit', 0]">
+            <button matTooltip="Create new recipe" mat-fab color="primary" aria-label="Example icon button with a delete icon">
                 <mat-icon>add</mat-icon>
             </button>
         </a>

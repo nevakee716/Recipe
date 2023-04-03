@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     exports: [
@@ -60,6 +61,7 @@ import { MatSelectModule } from '@angular/material/select';
         MatProgressSpinnerModule,
         MatFormFieldModule,
         MatSelectModule,
+        MatTooltipModule,
     ],
 })
 export class DemoMaterialModule {}
