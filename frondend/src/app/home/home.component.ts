@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { User } from '../models/user';
+import { User, Role } from '../models/user';
 import { map, Observable, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
@@ -12,6 +12,7 @@ export class HomeComponent {
     title = 'recipe';
     user$: Observable<User> | undefined;
     user: User | undefined;
+    roleEnum = Role;
     private subscriptions: Subscription[] = [];
     constructor(private authService: AuthService) {}
 

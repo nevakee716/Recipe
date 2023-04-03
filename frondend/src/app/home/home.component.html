@@ -12,7 +12,7 @@
             <a class="navLink" mat-button routerLink="/app/recipes">
                 <span>My favorites recipes</span>
             </a>
-            <a class="navLink" mat-button routerLink="/app/userstable">
+            <a *ngIf="user$ && (user$ | async)?.role == roleEnum.ADMIN" mat-button routerLink="['/app', 'usertable']">
                 <span>Admin Users</span>
             </a>
         </div>
