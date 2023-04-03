@@ -35,7 +35,7 @@
         </a>
     </div>
 </div>
-<pre>{{ selectedKeywords | json }}</pre>
+
 <mat-autocomplete #auto="matAutocomplete">
     <mat-option *ngFor="let recipe of recipes" [value]="recipe.name">
         {{ recipe.name }}
