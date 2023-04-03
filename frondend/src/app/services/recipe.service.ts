@@ -6,7 +6,8 @@ import { RecipeFormRequest } from '../models/recipe-form-request';
 import { Ingredient } from '../models/ingredient';
 import { environment } from '../../environments/environment';
 import { switchMap, tap } from 'rxjs/operators';
-import { User, Role, RecipeAccess } from '../models/user';
+import { User, Role, Access } from '../models/user';
+import { Comment } from '../models/comment';
 
 @Injectable({
     providedIn: 'root',
@@ -46,10 +47,23 @@ export class RecipeService {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
-    checkRecipeAccessRight(recipe: Recipe, user: User | undefined): RecipeAccess {
-        if (!user) return RecipeAccess.READ;
-        if (user.role === Role.ADMIN) return RecipeAccess.EDIT;
-        if (recipe?.creator?.id === user.id) return RecipeAccess.EDIT;
-        return RecipeAccess.READ;
+    addComment(id: number, comment: any): Observable<Comment> {
+        return this.http.post<Comment>(`${this.apiUrl}/${id}/comment`, comment);
+    }
+    deleteComment(id: number, recipe: Recipe): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/comment/${id}`, recipe);
+    }
+    checkRecipeAccessRight(recipe: Recipe, user: User | undefined): Access {
+        if (!user) return Access.READ;
+        if (user.role === Role.ADMIN) return Access.EDIT;
+        if (recipe?.creator?.id === user.id) return Access.EDIT;
+        return Access.READ;
+    }
+
+    checkCommentAccessRight(comment: Comment, user: User | undefined): Access {
+        if (!user) return Access.READ;
+        if (user.role === Role.ADMIN) return Access.EDIT;
+        if (comment?.creator?.id === user.id) return Access.EDIT;
+        return Access.READ;
     }
 }

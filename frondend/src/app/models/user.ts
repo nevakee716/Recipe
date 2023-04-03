@@ -6,7 +6,7 @@ export enum Role {
     ADMIN = 'ADMIN',
 }
 
-export enum RecipeAccess {
+export enum Access {
     READ = 'READ',
     EDIT = 'EDIT',
 }

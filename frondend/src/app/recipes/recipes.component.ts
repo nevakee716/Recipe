@@ -7,7 +7,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { User, Role, RecipeAccess } from '../models/user';
+import { User, Role, Access } from '../models/user';
 
 @Component({
     selector: 'app-recipes',
@@ -82,6 +82,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
 
     canEditRecipe(recipe: Recipe): boolean {
-        return RecipeAccess.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
+        return Access.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
     }
 }
