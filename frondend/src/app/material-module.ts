@@ -28,7 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
     exports: [
         CdkTableModule,
@@ -62,6 +62,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatFormFieldModule,
         MatSelectModule,
         MatTooltipModule,
+        MatChipsModule,
     ],
 })
 export class DemoMaterialModule {}
