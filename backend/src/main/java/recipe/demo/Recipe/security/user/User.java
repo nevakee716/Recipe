@@ -48,7 +48,7 @@ public class User implements UserDetails {
   private List<Comment> comments;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
   private List<Token> tokens;
 
   @Override
