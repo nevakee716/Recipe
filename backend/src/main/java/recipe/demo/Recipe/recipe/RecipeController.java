@@ -72,14 +72,29 @@ public class RecipeController {
 
     // only chef or admin can add recipe
     @PostMapping("/create")
-    public  ResponseEntity<?> createRecipe(@RequestBody RecipeFormRequest recipeFormRequest) {
+    public  ResponseEntity<?> createRecipe(@RequestBody Recipe recipe) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
         }
-        return ResponseEntity.ok(recipeService.createRecipe(recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),recipeFormRequest.getKeywords(),user));
+        Recipe newRecipe = recipeService.createRecipe(recipe,user);
+        return ResponseEntity.ok(newRecipe.getId());
+    }
+
+
+
+
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<?> updateRecipe(@PathVariable Long recipeId, @RequestBody Recipe recipe) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
+        }
+        recipeService.updateRecipe(recipeId,recipe,user);
+        return ResponseEntity.ok(recipeId);
     }
 
     @DeleteMapping("/{recipeId}")
@@ -92,19 +107,6 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId,user);
         return ResponseEntity.ok(user.toDTO());
     }
-
-
-    @PutMapping("/{recipeId}")
-    public ResponseEntity<?> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeFormRequest recipeFormRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        if (user.getRole() != Role.ADMIN && user.getRole() != Role.CHEF) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Chef or Admin");
-        }
-        return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeFormRequest.getRecipe(),recipeFormRequest.getQuantityIngredients(),recipeFormRequest.getKeywords(),user));
-    }
-
-
 
 
 }

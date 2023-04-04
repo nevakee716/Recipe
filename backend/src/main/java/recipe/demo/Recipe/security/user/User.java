@@ -1,5 +1,7 @@
 package recipe.demo.Recipe.security.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import recipe.demo.Recipe.recipe.Comment;
 import recipe.demo.Recipe.recipe.Recipe;
@@ -29,33 +31,29 @@ public class User implements UserDetails {
   private String firstname;
   private String lastname;
   private String email;
+
+  @JsonIgnore
   private String password;
 
   @Enumerated(EnumType.STRING)
   private Role role;
 
+
+  @JsonIgnoreProperties("creator")
   @OneToMany(mappedBy = "creator", orphanRemoval = true)
   private List<Recipe> recipes;
+
+  @JsonIgnoreProperties("creator")
   @OneToMany(mappedBy = "creator", orphanRemoval = true)
   private List<Comment> comments;
 
-
+  @JsonIgnore
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));
-  }
-
-  public UserDTO toDTO() {
-    UserDTO dto = new UserDTO();
-    dto.setId(this.getId());
-    dto.setFirstname(this.getFirstname());
-    dto.setLastname(this.getLastname());
-    dto.setEmail(this.getEmail());
-    dto.setRole(this.getRole());
-    return dto;
   }
 
   @Override
@@ -86,5 +84,15 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public UserDTO toDTO() {
+    UserDTO dto = new UserDTO();
+    dto.setId(this.getId());
+    dto.setFirstname(this.getFirstname());
+    dto.setLastname(this.getLastname());
+    dto.setEmail(this.getEmail());
+    dto.setRole(this.getRole());
+    return dto;
   }
 }

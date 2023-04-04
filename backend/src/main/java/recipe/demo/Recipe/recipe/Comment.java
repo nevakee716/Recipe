@@ -1,13 +1,21 @@
 package recipe.demo.Recipe.recipe;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import recipe.demo.Recipe.security.user.User;
 import recipe.demo.Recipe.security.user.UserDTO;
 
 import java.util.Date;
-import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
 public class Comment {
@@ -29,51 +37,15 @@ public class Comment {
     @Column(length = 5000)
     private String content;
 
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
+    @JsonIgnoreProperties("comment")
     @ManyToOne(fetch = FetchType.EAGER)
     private User creator;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
+    @JsonIgnoreProperties("comment")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Recipe recipe;
 
     public UserDTO getCreator() {
         return creator.toDTO();
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
 }

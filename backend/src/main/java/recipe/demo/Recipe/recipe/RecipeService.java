@@ -36,18 +36,18 @@ public class RecipeService {
     }
 
 
-    public Recipe createRecipe(Recipe recipe, List<QuantityIngredient> quantityIngredients, List<Keyword> keywords,User creator) {
+    public Recipe createRecipe(Recipe recipe, User creator) {
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.getName());
         newRecipe.setDescription(recipe.getDescription());
         newRecipe.setInstructions(recipe.getInstructions());
         newRecipe.setCreator(creator);
-        processKeywords(newRecipe, keywords);
-        processIngredient(newRecipe, quantityIngredients);
-
-        return recipeRepository.save(newRecipe);
+        processKeywords(newRecipe, recipe);
+        processIngredient(newRecipe, recipe);
+        recipeRepository.save(newRecipe);
+        return newRecipe;
     }
-    public Recipe updateRecipe(Long recipeId, Recipe recipe,List<QuantityIngredient> quantityIngredients, List<Keyword> keywords, User editor) {
+    public Recipe updateRecipe(Long recipeId, Recipe recipe, User editor) {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         if(!editor.getId().equals(existingRecipe.getCreator().getId()) && editor.getRole() == Role.CHEF) {
@@ -56,20 +56,21 @@ public class RecipeService {
             existingRecipe.setName(recipe.getName());
             existingRecipe.setDescription(recipe.getDescription());
             existingRecipe.setInstructions(recipe.getInstructions());
-            processKeywords(existingRecipe, keywords);
+            processKeywords(existingRecipe, recipe);
             existingRecipe.emptyIngredients();
-            processIngredient(existingRecipe, quantityIngredients);
-
-            return recipeRepository.save(existingRecipe);
+            processIngredient(existingRecipe, recipe);
+            recipeRepository.save(existingRecipe);
+            return existingRecipe;
         }
     }
-    private void processKeywords(Recipe existingRecipe,List<Keyword> keywords) {
+    private void processKeywords(Recipe existingRecipe,Recipe recipe) {
         List<Keyword> keywordList = new ArrayList<>();
-        if(keywords != null) {
-            keywords.forEach(keyword -> {
+        if(recipe.getKeywordList() != null) {
+            recipe.getKeywordList().forEach(keyword -> {
                 // new ingredient
                 if (keyword.getId() == 0) {
-                    Keyword newKeyword = new Keyword(keyword.getName());
+                    Keyword newKeyword = new Keyword();
+                    newKeyword.setName(keyword.getName());
                     keywordRepository.save(newKeyword);
                     keywordList.add(newKeyword);
                 } else {
@@ -80,11 +81,10 @@ public class RecipeService {
             });
         }
         existingRecipe.setKeywordList(keywordList);
-        recipeRepository.save(existingRecipe);
     }
-    private void processIngredient(Recipe existingRecipe,List<QuantityIngredient> quantityIngredients) {
-        if(quantityIngredients != null) {
-            quantityIngredients.forEach(quantityIngredient -> {
+    private void processIngredient(Recipe existingRecipe,Recipe recipe) {
+        if(recipe.getRecipesIngredients() != null) {
+            recipe.getRecipesIngredients().forEach(quantityIngredient -> {
                 // new ingredient
                 if (quantityIngredient.getIngredient().getId() == 0) {
                     Ingredient newIngredient = new Ingredient(quantityIngredient.getIngredient().getName());
@@ -119,19 +119,18 @@ public class RecipeService {
         }
         Recipe existingRecipe = recipeRepository.findById(recipe.getId())
                 .orElseThrow(() -> new IllegalStateException("Comment not found"));
-        recipe.removeComment(commentId);
-        recipeRepository.save(recipe);
+        existingRecipe.removeComment(commentId);
+        recipeRepository.save(existingRecipe);
         commentRepository.deleteById(commentId);
-
     }
 
     public Comment addCommentToRecipe(Long recipeId, Comment comment) {
-        Recipe recipe = recipeRepository.findById(recipeId)
+        Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         comment.setCreationDate(new Date());
         commentRepository.save(comment);
-        recipe.getCommentList().add(comment);
-        recipeRepository.save(recipe);
+        existingRecipe.getCommentList().add(comment);
+        recipeRepository.save(existingRecipe);
         return comment;
     }
 }

@@ -1,9 +1,16 @@
 package recipe.demo.Recipe.recipe;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
 public class Keyword {
@@ -20,30 +27,10 @@ public class Keyword {
     private Long id;
     private String name;
 
-    @ManyToMany
+    @JsonIgnoreProperties("keyword")
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Recipe> RecipeList;
 
-    public Keyword(String name) {
-        this.name = name;
-    }
 
-    public Keyword() {
 
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

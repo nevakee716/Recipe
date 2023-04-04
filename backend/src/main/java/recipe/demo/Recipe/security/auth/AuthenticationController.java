@@ -53,13 +53,13 @@ public class AuthenticationController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
     }
     userService.delete(userId);
-    return ResponseEntity.ok(userService.getUserDTOFromPrincipal(principal));
+    return ResponseEntity.ok(userService.getUserFromPrincipal(principal));
   }
 
   @GetMapping("/userinfo")
   public ResponseEntity<?> getUserInfo(Principal principal) {
 
-    return ResponseEntity.ok(userService.getUserDTOFromPrincipal(principal));
+    return ResponseEntity.ok(userService.getUserFromPrincipal(principal));
   }
 
 

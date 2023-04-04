@@ -26,7 +26,13 @@ public class UserService {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-        return user;
+        User exportUser = new User();
+        exportUser.setId(user.getId());
+        exportUser.setRole(user.getRole());
+        exportUser.setEmail(user.getEmail());
+        exportUser.setFirstname(user.getFirstname());
+        exportUser.setLastname(user.getLastname());
+        return exportUser;
     }
 
     public void delete(Integer id) {
@@ -34,19 +40,10 @@ public class UserService {
     }
 
 
-    public UserDTO getUserDTOFromPrincipal(Principal principal) {
-        if (principal == null) {
-            return null;
-        }
 
-        String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-        return user.toDTO();
-    }
 
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> user.toDTO()).toList();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 
