@@ -92,7 +92,7 @@ public class RecipeService {
                     existingRecipe.addIngredient(newIngredient, quantityIngredient.getQuantity());
                 } else {
                     Long id = quantityIngredient.getIngredient().getId();
-                    Ingredient existingIngredient = ingredientRepository.getReferenceById(id);
+                    Ingredient existingIngredient = ingredientRepository.findAllById(List.of(id)).get(0); // for some reason getId didn't work
                     existingRecipe.addIngredient(existingIngredient, quantityIngredient.getQuantity());
                 }
             });
@@ -106,10 +106,6 @@ public class RecipeService {
         }
         recipeRepository.deleteById(recipeId);
     }
-
-
-
-
 
     public void deleteComment(Long commentId, User user, Recipe recipe) {
         Comment existingComment = commentRepository.findById(commentId)
