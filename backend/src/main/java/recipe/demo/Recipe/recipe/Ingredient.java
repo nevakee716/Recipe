@@ -39,5 +39,7 @@ public class Ingredient {
         this.name = name;
         this.recipesIngredients = new ArrayList<RecipeIngredient>();
     }
-
+    public String toString() {
+        return getName();
+    }
 }

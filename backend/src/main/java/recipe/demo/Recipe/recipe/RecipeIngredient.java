@@ -38,6 +38,8 @@ public class RecipeIngredient {
         this.ingredient = ingredient;
         this.quantity = quantity;
     }
-
+    public String toString() {
+        return getRecipe() + "_" + getIngredient() + "_" + getQuantity();
+    }
 
 }

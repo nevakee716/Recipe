@@ -84,6 +84,11 @@ public class Recipe {
     public UserDTO getCreator() {
         return creator.toDTO();
     }
+
+
+    public String toString() {
+        return getName();
+    }
 }
 
 
