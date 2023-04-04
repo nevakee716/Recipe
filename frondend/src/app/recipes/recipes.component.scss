@@ -1,12 +1,31 @@
 .wrapper {
     margin: 3rem;
-    .searchBar {
+
+    .searchTool {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 2rem;
         width: 100%;
+        align-items: flex-start;
+        .searchBar {
+            width: 50rem;
+            flex: auto;
+        }
+        #keywordFilter {
+            width: 20rem;
+        }
     }
+
     .recipes {
         display: flex;
         flex-wrap: wrap;
         gap: 2rem;
+        .description {
+            margin-bottom: 0.5rem;
+        }
+        .keywords {
+            margin: 0.5rem;
+        }
         .recipe {
             flex: auto;
             width: 25rem;

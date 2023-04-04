@@ -1,19 +1,26 @@
 <div class="wrapper">
-    <mat-form-field class="searchBar">
-        <mat-label>Search</mat-label>
-        <input matInput [matAutocomplete]="auto" type="text" [formControl]="searchFormControl" />
-        <button *ngIf="searchText$ | async" matSuffix mat-icon-button aria-label="Clear" (click)="searchFormControl.setValue('')">
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
-    <app-keyword-filter id="keywordFilter" [allKeywords]="allKeywords" (keywordSelected)="keywordSelected($event)"></app-keyword-filter>
+    <div class="searchTool">
+        <mat-form-field class="searchBar">
+            <mat-label>Search</mat-label>
+            <input matInput [matAutocomplete]="auto" type="text" [formControl]="searchFormControl" />
+            <button *ngIf="searchText$ | async" matSuffix mat-icon-button aria-label="Clear" (click)="searchFormControl.setValue('')">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <app-keyword-filter id="keywordFilter" [allKeywords]="allKeywords" (keywordSelected)="keywordSelected($event)"></app-keyword-filter>
+    </div>
     <div class="recipes">
         <mat-card *ngFor="let recipe of getFilteredRecipes()" class="recipe">
             <mat-card-header>
                 <mat-card-title> {{ recipe.name }}</mat-card-title>
-                <mat-card-subtitle> {{ recipe.creator.firstname }} {{ recipe.creator.lastname }}</mat-card-subtitle>
+                <mat-card-subtitle> Created by {{ recipe.creator.firstname }} {{ recipe.creator.lastname }}</mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content> {{ recipe.description }}</mat-card-content>
+            <mat-card-content class="description"> {{ recipe.description }}</mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-chip-listbox class="keywords" aria-label="keywords">
+                <mat-chip *ngFor="let keyword of recipe.keywordList"> {{ keyword.name }}</mat-chip>
+            </mat-chip-listbox>
+            <mat-divider></mat-divider>
             <mat-card-actions>
                 <a color="primary" mat-button [routerLink]="['/app', 'recipes', 'view', recipe.id]">
                     <mat-icon>remove_red_eye</mat-icon> View
