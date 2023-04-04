@@ -18,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserFromPrincipal(Principal principal) {
+    public UserDTO getUserFromPrincipal(Principal principal) {
         if (principal == null) {
             return null;
         }
@@ -26,13 +26,8 @@ public class UserService {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-        User exportUser = new User();
-        exportUser.setId(user.getId());
-        exportUser.setRole(user.getRole());
-        exportUser.setEmail(user.getEmail());
-        exportUser.setFirstname(user.getFirstname());
-        exportUser.setLastname(user.getLastname());
-        return exportUser;
+
+        return user.toDTO();
     }
 
     public void delete(Integer id) {
