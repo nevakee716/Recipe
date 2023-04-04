@@ -8,7 +8,7 @@ export interface Recipe {
     description: string;
     imageUrl: string;
     instructions: string;
-    ingredientsQuantity?: QuantityIngredient[];
+    recipesIngredients?: QuantityIngredient[];
     commentList: Comment[];
     keywordList: Keyword[];
     creator: User;

@@ -10,7 +10,7 @@
             <div class="ingredients">
                 <mat-list>
                     <div mat-subheader>Ingredients:</div>
-                    <mat-list-item *ngFor="let ingredientQuantity of recipe.ingredientsQuantity">
+                    <mat-list-item *ngFor="let ingredientQuantity of recipe.recipesIngredients">
                         {{ ingredientQuantity.ingredient.name }} - {{ ingredientQuantity.quantity }}
                     </mat-list-item>
                 </mat-list>

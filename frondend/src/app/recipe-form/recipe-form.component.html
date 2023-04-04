@@ -27,9 +27,9 @@
                 </mat-form-field>
             </div>
             <div class="ingredientKeyword">
-                <div formArrayName="ingredients">
+                <div formArrayName="recipesIngredients">
                     <div>
-                        <div *ngFor="let ingredientCtrl of getControls('ingredients'); let i = index">
+                        <div *ngFor="let ingredientCtrl of getControls('recipesIngredients'); let i = index">
                             <div class="ingredientKeywordForm" [formGroupName]="i">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Ingredient</mat-label>
@@ -48,9 +48,9 @@
                     </div>
                     <button mat-raised-button class="add" color="accent" type="button" (click)="onAddIngredient()">Add Ingredient</button>
                 </div>
-                <div formArrayName="keywords">
+                <div formArrayName="keywordList">
                     <div>
-                        <div *ngFor="let keywordCtrl of getControls('keywords'); let i = index">
+                        <div *ngFor="let keywordCtrl of getControls('keywordList'); let i = index">
                             <div class="ingredientKeywordForm" [formGroupName]="i">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Keyword</mat-label>

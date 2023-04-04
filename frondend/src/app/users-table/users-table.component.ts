@@ -121,6 +121,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
             password: this.genPassword(),
             role: Role.USER,
             recipes: [],
+            comments: [],
         });
         this.getSnapShotForm();
         const control = this.VOForm?.get('VORows') as FormArray;

@@ -24,14 +24,15 @@ export class RecipeFormComponent implements OnInit {
     keywords$: Observable<Keyword[]> | undefined;
     ingredient$: Observable<Ingredient[]> | undefined;
 
+    recipe: Recipe | undefined;
     recipeId: number = 0;
     recipeForm: FormGroup = new FormGroup({
         name: new FormControl(null, Validators.required),
         description: new FormControl(null, Validators.required),
         imageUrl: new FormControl(null),
         instructions: new FormControl(null, Validators.required),
-        ingredients: new FormArray([]),
-        keywords: new FormArray([]),
+        recipesIngredients: new FormArray([]),
+        keywordList: new FormArray([]),
     });
 
     ingredients: Ingredient[] = [];
@@ -67,10 +68,16 @@ export class RecipeFormComponent implements OnInit {
         this.subscriptions.push(
             this.recipes$.subscribe((recipes) => {
                 if (this.recipeId !== 0) {
+                    this.recipe = recipes[0];
                     this.initForm(recipes[0]);
                 }
             })
         );
+    }
+
+    async refreshKeywordAndIngredients(): Promise<void> {
+        if (this.ingredient$) this.ingredients = await lastValueFrom(this.ingredient$);
+        if (this.keywords$) this.keywords = await lastValueFrom(this.keywords$);
     }
 
     initForm(recipe: Recipe): void {
@@ -79,61 +86,51 @@ export class RecipeFormComponent implements OnInit {
             description: new FormControl(recipe.description, Validators.required),
             imageUrl: new FormControl(recipe.imageUrl),
             instructions: new FormControl(recipe.instructions, Validators.required),
-            ingredients: new FormArray([]),
-            keywords: new FormArray([]),
+            recipesIngredients: new FormArray([]),
+            keywordList: new FormArray([]),
         });
         for (const keyword of recipe.keywordList || []) {
             const keywordGroup = new FormGroup({
                 keyword: new FormControl(keyword.name, Validators.required),
             });
-            (<FormArray>this.recipeForm?.get('keywords')).push(keywordGroup);
+            (<FormArray>this.recipeForm?.get('keywordList')).push(keywordGroup);
         }
-        for (const ingredientQuantity of recipe.ingredientsQuantity || []) {
+        for (const ingredientQuantity of recipe.recipesIngredients || []) {
             const ingredientGroup = new FormGroup({
                 ingredient: new FormControl(ingredientQuantity.ingredient.name, Validators.required),
                 quantity: new FormControl(ingredientQuantity.quantity, Validators.required),
             });
-            (<FormArray>this.recipeForm?.get('ingredients')).push(ingredientGroup);
+            (<FormArray>this.recipeForm?.get('recipesIngredients')).push(ingredientGroup);
         }
-    }
-
-    async refreshKeywordAndIngredients(): Promise<void> {
-        if (this.ingredient$) this.ingredients = await lastValueFrom(this.ingredient$);
-        if (this.keywords$) this.keywords = await lastValueFrom(this.keywords$);
     }
 
     async onSubmit() {
         const newRecipe = this.recipeForm?.value;
+        newRecipe.commentList = this.recipe ? this.recipe.commentList : [];
+        newRecipe.keywordList = this.recipeForm?.value.keywordList.map((i: any) => {
+            let k: Keyword | undefined = this.keywords.find((k: Keyword) => k.name === i.keyword);
+            if (k === undefined) k = { id: 0, name: i.keyword };
+            return k;
+        });
+        newRecipe.recipesIngredients = this.recipeForm?.value.recipesIngredients.map((i: any) => {
+            let ingredient: Ingredient | undefined = this.ingredients.find((ingredient: Ingredient) => ingredient.name === i.ingredient);
+            if (ingredient === undefined) ingredient = { id: 0, name: i.ingredient };
 
-        const recipeForm: RecipeFormRequest = {
-            recipe: newRecipe,
-            quantityIngredients: this.recipeForm?.value.ingredients.map((i: any) => {
-                let ingredient: Ingredient | undefined = this.ingredients.find(
-                    (ingredient: Ingredient) => ingredient.name === i.ingredient
-                );
-                if (ingredient === undefined) ingredient = { id: 0, name: i.ingredient };
+            let r: QuantityIngredient = {
+                ingredient: ingredient,
+                quantity: i.quantity,
+            };
+            return r;
+        });
 
-                let r: QuantityIngredient = {
-                    ingredient: ingredient,
-                    quantity: i.quantity,
-                };
-                return r;
-            }),
-            keywords: this.recipeForm?.value.keywords.map((i: any) => {
-                let k: Keyword | undefined = this.keywords.find((k: Keyword) => k.name === i.keyword);
-                if (k === undefined) k = { id: 0, name: i.keyword };
-                return k;
-            }),
-        };
-        let answered: Recipe;
         try {
             if (this.recipeId !== 0) {
-                answered = await lastValueFrom(this.recipeService.updateRecipe(this.recipeId, recipeForm));
+                await lastValueFrom(this.recipeService.updateRecipe(this.recipeId, newRecipe));
                 this._snackBar.open('Recipe Successfully Edited', 'Close');
             } else {
-                answered = await lastValueFrom(this.recipeService.createRecipe(recipeForm));
+                let newRecipeId = await lastValueFrom(this.recipeService.createRecipe(newRecipe));
                 this._snackBar.open('Recipe Successfully Created', 'Close');
-                this.router.navigate(['/', 'app', 'recipes', 'edit', answered.id]);
+                this.router.navigate(['/', 'app', 'recipes', 'edit', newRecipeId]);
             }
         } catch (e: any) {
             this._snackBar.open(`Issue when submitting the recipe : ${e?.error?.error}`, 'Close');
@@ -147,11 +144,11 @@ export class RecipeFormComponent implements OnInit {
             quantity: new FormControl(null, [Validators.required]),
         });
 
-        (<FormArray>this.recipeForm?.get('ingredients')).push(ingredientGroup);
+        (<FormArray>this.recipeForm?.get('recipesIngredients')).push(ingredientGroup);
     }
 
     onRemoveIngredient(index: number) {
-        (<FormArray>this.recipeForm?.get('ingredients')).removeAt(index);
+        (<FormArray>this.recipeForm?.get('recipesIngredients')).removeAt(index);
     }
 
     onAddKeyword() {
@@ -159,11 +156,11 @@ export class RecipeFormComponent implements OnInit {
             keyword: new FormControl(null, Validators.required),
         });
 
-        (<FormArray>this.recipeForm?.get('keywords')).push(keywordGroup);
+        (<FormArray>this.recipeForm?.get('keywordList')).push(keywordGroup);
     }
 
     onRemoveKeyword(index: number) {
-        (<FormArray>this.recipeForm?.get('keywords')).removeAt(index);
+        (<FormArray>this.recipeForm?.get('keywordList')).removeAt(index);
     }
 
     getControls(item: string) {
