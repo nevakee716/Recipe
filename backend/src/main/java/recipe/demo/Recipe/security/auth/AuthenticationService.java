@@ -6,6 +6,7 @@ import recipe.demo.Recipe.security.token.TokenRepository;
 import recipe.demo.Recipe.security.token.TokenType;
 import recipe.demo.Recipe.security.user.Role;
 import recipe.demo.Recipe.security.user.User;
+import recipe.demo.Recipe.security.user.UserDTO;
 import recipe.demo.Recipe.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

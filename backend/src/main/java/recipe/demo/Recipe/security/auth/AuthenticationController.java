@@ -29,7 +29,7 @@ public class AuthenticationController {
     if (userService.getUserFromPrincipal(principal).getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
     }
-    return ResponseEntity.ok(service.register(user));
+    return ResponseEntity.ok(service.register(user).toDTO());
   }
 
 
@@ -40,7 +40,7 @@ public class AuthenticationController {
     if (userService.getUserFromPrincipal(principal).getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
     }
-    return ResponseEntity.ok(service.register(user));
+    return ResponseEntity.ok(service.register(user).toDTO());
   }
 
 
