@@ -1,5 +1,5 @@
 <form>
-    <mat-form-field class="example-chip-list" appearance="fill">
+    <mat-form-field class="formField" appearance="fill">
         <mat-label>Keywords</mat-label>
         <mat-chip-grid #chipGrid aria-label="keyword selection">
             <mat-chip-row *ngFor="let keyword of keywords" (removed)="remove(keyword.name)">
