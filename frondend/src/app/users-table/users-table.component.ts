@@ -100,7 +100,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
             firstname: new FormControl(user.firstname),
             lastname: new FormControl(user.lastname),
             role: new FormControl(user.role),
-            password: new FormControl(user.password),
+            password: new FormControl(undefined),
             action: new FormControl('existingRecord'),
             isEditable: new FormControl(true),
         };
