@@ -47,7 +47,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
     keywordSelected(selectedKeywords: any): void {
         this.selectedKeywords = selectedKeywords;
-        console.table(this.selectedKeywords);
     }
 
     private fetchKeywords(): void {
