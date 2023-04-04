@@ -49,11 +49,11 @@ public class Recipe {
     private User creator;
 
     @JsonIgnoreProperties("recipes")
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Keyword> keywordList;
 
     @JsonIgnoreProperties("recipe")
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comment> commentList;
 
     public Recipe() {

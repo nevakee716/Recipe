@@ -31,7 +31,7 @@ public class Ingredient {
     private Long id;
     private String name;
     @JsonIgnoreProperties("ingredient")
-    @OneToMany(mappedBy = "ingredient",  orphanRemoval = true)
+    @OneToMany(mappedBy = "ingredient",  orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RecipeIngredient> recipesIngredients;
 
 
