@@ -91,6 +91,8 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         this.dataSource.filterPredicate = (data: AbstractControl, filter) => {
             return filterPredicate.call(this.dataSource, data.value, filter);
         };
+
+        this.getSnapShotForm();
     }
 
     userToForm(user: User) {
