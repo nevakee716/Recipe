@@ -20,20 +20,5 @@ public class IngredientService {
         return ingredientRepository.findAll();
     }
 
-    public Ingredient createIngredient(Ingredient ingredient) {
-        return ingredientRepository.save(ingredient);
-    }
-
-    public Ingredient updateIngredient(Long ingredientId, Ingredient ingredient) {
-        Ingredient existingIngredient = ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new IllegalStateException("Ingredient not found"));
-        existingIngredient.setName(ingredient.getName());
-        return ingredientRepository.save(existingIngredient);
-    }
-
-    public void deleteIngredient(Long ingredientId) {
-        ingredientRepository.deleteById(ingredientId);
-    }
-
 
 }
