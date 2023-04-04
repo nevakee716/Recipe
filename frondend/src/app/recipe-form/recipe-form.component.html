@@ -1,7 +1,8 @@
 <form *ngIf="recipeForm" [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Edit Recipe</mat-card-title>
+            <mat-card-title *ngIf="recipeId === 0">Create Recipe</mat-card-title>
+            <mat-card-title *ngIf="recipeId !== 0">Edit Recipe</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
