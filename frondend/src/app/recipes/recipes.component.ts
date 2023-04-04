@@ -45,20 +45,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.fetchSearchText();
     }
 
-    ngAfterViewInit(): void {
-        this.fetchRecipes();
-    }
-
-    async deleteRecipe(id: number) {
-        try {
-            await lastValueFrom(this.recipeService.deleteRecipe(id));
-            this._snackBar.open('Recipe Successfully Deleted', 'Close');
-            this.recipeService.triggerGetRecipe();
-        } catch (e: any) {
-            this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
-        }
-    }
-
     keywordSelected(selectedKeywords: any): void {
         this.selectedKeywords = selectedKeywords;
         console.table(this.selectedKeywords);
@@ -84,9 +70,12 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private fetchRecipes(): void {
         try {
             this.recipes$ = this.recipeService.getRecipes();
-            this.recipes$.subscribe((recipes: Recipe[]) => {
-                this.recipes = recipes;
-            });
+
+            this.subscriptions.push(
+                this.recipes$.subscribe((recipes: Recipe[]) => {
+                    this.recipes = recipes;
+                })
+            );
             this.recipeService.triggerGetRecipe();
         } catch (error) {
             console.error('Error fetching recipes:', error);
@@ -95,9 +84,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
     private fetchSearchText(): void {
         this.searchText$ = this.searchFormControl.valueChanges;
-        this.searchText$.subscribe((searchText: string) => {
-            this.searchText = searchText;
-        });
+        this.subscriptions.push(
+            this.searchText$.subscribe((searchText: string) => {
+                this.searchText = searchText;
+            })
+        );
     }
 
     public getFilteredRecipes(): Recipe[] {
@@ -113,5 +104,15 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
     canEditRecipe(recipe: Recipe): boolean {
         return Access.EDIT === this.recipeService.checkRecipeAccessRight(recipe, this.user);
+    }
+
+    async deleteRecipe(id: number) {
+        try {
+            await lastValueFrom(this.recipeService.deleteRecipe(id));
+            this._snackBar.open('Recipe Successfully Deleted', 'Close');
+            this.recipeService.triggerGetRecipe();
+        } catch (e: any) {
+            this._snackBar.open(`Issue when deleting recipe : ${e?.error?.error}`, 'Close');
+        }
     }
 }
