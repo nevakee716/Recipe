@@ -13,30 +13,15 @@ export class HomeComponent {
     user$: Observable<User> | undefined;
     user: User | undefined;
     roleEnum = Role;
-    private subscriptions: Subscription[] = [];
     constructor(private authService: AuthService) {}
-
-    ngOnDestroy(): void {
-        this.subscriptions.forEach((s) => s.unsubscribe);
-    }
 
     ngOnInit(): void {
         this.user$ = this.authService.getUserDetail();
-        setTimeout(() => {
-            this.refresh();
-        });
-    }
-
-    ngAfterContentChecked(): void {
-        this.user$ ?? this.authService.getUserDetail();
+        this.authService.triggerRefreshUserInfo();
     }
 
     logout(): void {
         this.authService.logout();
         this.user$ = undefined;
-    }
-
-    refresh(): void {
-        this.authService.triggerRefreshUserInfo();
     }
 }
