@@ -17,7 +17,10 @@ export class HomeComponent {
 
     ngOnInit(): void {
         this.user$ = this.authService.getUserDetail();
-        this.authService.triggerRefreshUserInfo();
+
+        setTimeout(() => {
+            this.authService.triggerRefreshUserInfo();
+        });
     }
 
     logout(): void {
