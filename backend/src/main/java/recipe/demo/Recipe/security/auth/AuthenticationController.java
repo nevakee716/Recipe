@@ -33,6 +33,17 @@ public class AuthenticationController {
   }
 
 
+  @PutMapping("/user/{userId}")
+  public ResponseEntity<?> editUser(Principal principal, @RequestBody User user
+  ) {
+    // only admin can register other user
+    if (userService.getUserFromPrincipal(principal).getRole() != Role.ADMIN) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Admin");
+    }
+    return ResponseEntity.ok(service.register(user));
+  }
+
+
   @PostMapping("/authenticate")
   public ResponseEntity<?> authenticate(
       @RequestBody AuthenticationRequest request
@@ -58,7 +69,6 @@ public class AuthenticationController {
 
   @GetMapping("/userinfo")
   public ResponseEntity<?> getUserInfo(Principal principal) {
-
     return ResponseEntity.ok(userService.getUserFromPrincipal(principal));
   }
 

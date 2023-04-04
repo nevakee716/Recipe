@@ -45,7 +45,7 @@ export class AuthService {
         if (user.id === 0) {
             return this.http.post<User>(`${environment.authUrl}/register`, user);
         } else {
-            return this.http.put<User>(`${environment.authUrl}/user`, user);
+            return this.http.put<User>(`${environment.authUrl}/user/${user.id}`, user);
         }
     }
 
