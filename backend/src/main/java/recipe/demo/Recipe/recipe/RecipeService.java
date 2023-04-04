@@ -128,7 +128,7 @@ public class RecipeService {
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe not found"));
         comment.setCreationDate(new Date());
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
         existingRecipe.getCommentList().add(comment);
         recipeRepository.save(existingRecipe);
         return comment;
