@@ -154,8 +154,9 @@ export class UsersTableComponent implements OnInit, OnDestroy {
             if (this.users[i].id !== 0) await lastValueFrom(this.authService.delete(this.users[i]));
             VOFormElement.get('VORows').removeAt(i);
             VOFormElement.updateValueAndValidity();
-            this.initialValues.removeAt(i);
+
             this.users.splice(i, 1);
+            this.getSnapShotForm();
             this._snackBar.open(`User was successfully deleted`, 'Close');
             this.dataSource = new MatTableDataSource(VOFormElement.get('VORows').controls);
         } catch (e: any) {
