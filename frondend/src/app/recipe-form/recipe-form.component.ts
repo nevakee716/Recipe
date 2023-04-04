@@ -7,11 +7,9 @@ import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Ingredient } from '../models/ingredient';
 import { QuantityIngredient } from '../models/quantity-ingredient';
 import { Recipe } from '../models/recipe';
-import { RecipeFormRequest } from '../models/recipe-form-request';
 import { Keyword } from '../models/keyword';
 import { RecipeService } from '../services/recipe.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { KeywordFilterComponent } from '../keyword-filter/keyword-filter.component';
 
 @Component({
     selector: 'app-recipe-form',
