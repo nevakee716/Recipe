@@ -32,7 +32,7 @@ public class User implements UserDetails {
   private String lastname;
   private String email;
 
-  @JsonIgnore
+
   private String password;
 
   @Enumerated(EnumType.STRING)
