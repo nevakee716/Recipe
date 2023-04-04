@@ -2,15 +2,28 @@
     .recipeCard {
         margin: 1rem;
 
+        .recipeTitle {
+            font-size: xx-large;
+            margin-top: 1rem;
+        }
+        .recipeDescription {
+            margin-top: 0.5rem;
+        }
         .content {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             .ingredients {
-                width: 12rem;
+                width: 15rem;
             }
             .instructions {
                 flex: auto;
+                width: 50rem;
+
+                .instructionText {
+                    text-align: justify;
+                    margin: calc((3rem - 1.5rem) / 2) 16px;
+                }
             }
         }
         .keywords {
@@ -19,6 +32,12 @@
         .comments {
             width: calc(100% - 2rem);
             margin-bottom: 1rem;
+
+            .commentTitle {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                font-size: x-large;
+            }
             .newComment {
                 width: calc(100% - 2rem);
             }
