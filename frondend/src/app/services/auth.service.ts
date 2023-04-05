@@ -64,7 +64,7 @@ export class AuthService {
     async logout() {
         let r = await lastValueFrom(this.http.get<{ token: string }>(`${environment.authUrl}/logout`));
         localStorage.removeItem('token');
-        this.router.navigate(['/login']);
+        this.router.navigate(['login']);
     }
 
     isAuthenticated(): boolean {

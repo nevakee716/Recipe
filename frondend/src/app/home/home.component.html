@@ -2,17 +2,17 @@
 <mat-toolbar class="topbar" color="primary">
     <mat-toolbar-row class="row">
         <div class="nav">
-            <a class="navLink" mat-button routerLink="/app/recipes">
+            <a class="navLink" mat-button [routerLink]="['recipes']">
                 <mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>
                 <span>Recipe</span>
             </a>
-            <a class="navLink" mat-button [routerLink]="['/app', 'recipes']">
+            <a class="navLink" mat-button [routerLink]="['recipes']">
                 <span>My creation</span>
             </a>
-            <a class="navLink" mat-button routerLink="/app/recipes">
+            <a class="navLink" mat-button [routerLink]="['recipes']">
                 <span>My favorites recipes</span>
             </a>
-            <a *ngIf="user$ && (user$ | async)?.role == roleEnum.ADMIN" mat-button [routerLink]="['/app', 'userstable']">
+            <a *ngIf="user$ && (user$ | async)?.role == roleEnum.ADMIN" mat-button [routerLink]="['userstable']">
                 <span>Admin Users</span>
             </a>
         </div>

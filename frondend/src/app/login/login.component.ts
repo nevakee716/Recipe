@@ -21,7 +21,7 @@ export class LoginComponent {
         if (this.form.valid) {
             try {
                 await lastValueFrom(this.authService.login({ email: this.form.value.email, password: this.form.value.password }));
-                this.router.navigate(['/app/recipes']);
+                this.router.navigate(['app/recipes']);
             } catch (error) {
                 this.error = error;
                 console.log('Error:', error);

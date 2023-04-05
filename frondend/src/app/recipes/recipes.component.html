@@ -22,10 +22,8 @@
             </mat-chip-listbox>
             <mat-divider></mat-divider>
             <mat-card-actions>
-                <a color="primary" mat-button [routerLink]="['/app', 'recipes', 'view', recipe.id]">
-                    <mat-icon>remove_red_eye</mat-icon> View
-                </a>
-                <a color="primary" *ngIf="canEditRecipe(recipe)" mat-button [routerLink]="['/app', 'recipes', 'edit', recipe.id]">
+                <a color="primary" mat-button [routerLink]="['view', recipe.id]"> <mat-icon>remove_red_eye</mat-icon> View </a>
+                <a color="primary" *ngIf="canEditRecipe(recipe)" mat-button [routerLink]="['edit', recipe.id]">
                     <mat-icon>edit</mat-icon> Edit
                 </a>
                 <button color="warn" *ngIf="canEditRecipe(recipe)" mat-button (click)="deleteRecipe(recipe.id)">
