@@ -25,13 +25,36 @@
         }
         .keywords {
             margin: 0.5rem;
+            height: 40px;
         }
         .recipe {
             flex: auto;
             width: 25rem;
             max-width: 40rem;
-            mat-card-content {
+            justify-content: space-between;
+            .description {
                 margin-top: 0.5rem;
+
+                text-overflow: ellipsis;
+                height: 4rem;
+                text-align: justify;
+                overflow-y: auto;
+            }
+            .description::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                border-radius: 10px;
+                background-color: #f5f5f5;
+            }
+
+            .description::-webkit-scrollbar {
+                width: 6px;
+                background-color: #f5f5f5;
+            }
+
+            .description::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                background-color: #555;
             }
         }
     }
