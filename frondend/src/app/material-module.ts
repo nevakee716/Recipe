@@ -1,20 +1,10 @@
 import { NgModule } from '@angular/core';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSortModule } from '@angular/material/sort';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTreeModule } from '@angular/material/tree';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -32,23 +22,13 @@ import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
     exports: [
         CdkTableModule,
-        MatBadgeModule,
-        MatBottomSheetModule,
-        MatButtonToggleModule,
-        MatStepperModule,
-        MatDatepickerModule,
         MatDividerModule,
         MatExpansionModule,
-        MatGridListModule,
         MatIconModule,
         MatNativeDateModule,
         MatRippleModule,
-        MatSidenavModule,
-        MatSortModule,
         MatToolbarModule,
-        MatTreeModule,
         FormsModule,
-        ScrollingModule,
         MatCardModule,
         MatAutocompleteModule,
         MatInputModule,
